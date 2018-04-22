@@ -1,0 +1,33 @@
+{
+    "name": "stratadox/table-mapper",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stratadox",
+            "homepage": "http://www.stratadox.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Stratadox\\TableLoader\\": ["src", "contracts"]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Stratadox\\TableLoader\\Test\\": "tests"
+        }
+    },
+    "require": {
+        "php": ">=7.1",
+        "stratadox/instantiator": "^0.1.0",
+        "stratadox/immutable-collection": "^1.1",
+        "stratadox/hydrator-contracts": "^0.1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.1",
+        "satooshi/php-coveralls": "^2.0",
+        "phpstan/phpstan": "^0.9.2",
+        "stratadox/hydrator": "^3.2",
+        "stratadox/hydration-mapper": "^2.2"
+    }
+}
