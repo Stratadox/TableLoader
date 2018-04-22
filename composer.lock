@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee788fa0ae9654668a4ee26ec57cbeef",
+    "content-hash": "c78317f8d93aa3b315054f68ce75c443",
     "packages": [
         {
             "name": "stratadox/collection-contracts",
