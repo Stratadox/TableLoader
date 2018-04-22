@@ -1,4 +1,4 @@
-# Table Mapper
+# Table Loader
 
 [![Build Status](https://travis-ci.org/Stratadox/TableLoader.svg?branch=master)](https://travis-ci.org/Stratadox/TableLoader)
 [![Coverage Status](https://coveralls.io/repos/github/Stratadox/TableLoader/badge.svg?branch=master)](https://coveralls.io/github/Stratadox/TableLoader?branch=master)
@@ -6,4 +6,4 @@
 
 ## Installation
 
-Install using `composer require stratadox/table-mapper`
+Install using `composer require stratadox/table-loader`
