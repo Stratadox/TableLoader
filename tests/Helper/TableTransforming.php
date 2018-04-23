@@ -12,7 +12,7 @@ trait TableTransforming
      * Transforms one tabular format into another.
      *
      * @param array $table Visual table.
-     * @return array       Rows of maps.
+     * @return array       List of maps.
      */
     private function table(array $table): array
     {
