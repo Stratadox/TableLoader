@@ -25,16 +25,16 @@ class Clubs_have_Members extends TestCase
     function loading_clubs_and_their_members_from_a_joined_table_result()
     {
         $data = $this->table([
-           //----------+-----------------+------------+---------------+,
+            //---------+-----------------+------------+---------------+,
             [ 'club_id', 'club_name'     , 'member_id', 'member_name' ],
-           //----------+-----------------+------------+---------------+,
+            //---------+-----------------+------------+---------------+,
             [ 1        , 'Foo de la Club', 1          , 'Chuck Norris'],
             [ 1        , 'Foo de la Club', 2          , 'Jackie Chan' ],
             [ 2        , 'The Foo Bar'   , 1          , 'Chuck Norris'],
             [ 2        , 'The Foo Bar'   , 3          , 'John Doe'    ],
             [ 3        , 'Space Club'    , 4          , 'Captain Kirk'],
             [ 3        , 'Space Club'    , 5          , 'Darth Vader' ],
-           //----------+-----------------+------------+---------------+,
+            //---------+-----------------+------------+---------------+,
         ]);
 
         $make = Joined::table(
