@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Stratadox\TableLoader\Test\Unit\MakesObjects;
+namespace Stratadox\TableLoader\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Stratadox\Hydrator\MappedHydrator;
