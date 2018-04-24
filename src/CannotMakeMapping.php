@@ -6,6 +6,11 @@ namespace Stratadox\TableLoader;
 use function sprintf as withMessage;
 use UnexpectedValueException;
 
+/**
+ * Notifies the client code that the table mapping could not be produced.
+ *
+ * @author Stratadox
+ */
 final class CannotMakeMapping
     extends UnexpectedValueException
     implements CannotMakeTableMapping

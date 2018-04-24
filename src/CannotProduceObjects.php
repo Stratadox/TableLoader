@@ -7,6 +7,11 @@ use function sprintf as withMessage;
 use Throwable;
 use UnexpectedValueException;
 
+/**
+ * Notifies the client code that producing the objects was unsuccessful.
+ *
+ * @author Stratadox
+ */
 final class CannotProduceObjects
     extends UnexpectedValueException
     implements CannotMakeTableMapping
