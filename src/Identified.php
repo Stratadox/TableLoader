@@ -67,7 +67,7 @@ final class Identified implements IdentifiesEntities
             $this->mustHave($row, $column);
             $id[] = replace(self::PROBLEMS, self::SOLUTIONS, $row[$column]);
         }
-        return implode(':', $id);
+        return '#' . implode(':', $id);
     }
 
     /** @throws CannotIdentifyEntity */
