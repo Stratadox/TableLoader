@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
-use Stratadox\Hydrator\CouldNotHydrate;
+use Stratadox\Hydrator\CannotHydrate;
 use Stratadox\Hydrator\Hydrates;
 
 /**
@@ -52,7 +52,7 @@ final class SimpleTable implements LoadsTable
             $tag = $this->identity->forLoading($row);
             try {
                 $objects[$tag] = $this->make->fromArray($row);
-            } catch (CouldNotHydrate $exception) {
+            } catch (CannotHydrate $exception) {
                 throw UnmappableRow::encountered($exception, $this->label, $row);
             }
         }

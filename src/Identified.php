@@ -38,11 +38,13 @@ final class Identified implements IdentifiesEntities
         return new self($identifyingColumns, []);
     }
 
+    /** @inheritdoc */
     public function andForLoading(string ...$columns): IdentifiesEntities
     {
         return new self($this->identifyingColumns, $columns);
     }
 
+    /** @inheritdoc */
     public function forIdentityMap(array $row): string
     {
         return $this->identifierFor($row, $this->identifyingColumns);

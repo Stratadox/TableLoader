@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Stratadox\TableLoader;
 
 use Stratadox\Hydrator\ArrayHydrator;
-use Stratadox\Hydrator\CouldNotHydrate;
+use Stratadox\Hydrator\CannotHydrate;
 use Stratadox\Hydrator\Hydrates;
 
 /**
@@ -66,7 +66,7 @@ final class HasMany implements MakesConnections
         foreach ($many as $id => $relatedObjects) {
             try {
                 $collections[$id] = $this->collection->fromArray($relatedObjects);
-            } catch (CouldNotHydrate $exception) {
+            } catch (CannotHydrate $exception) {
                 throw UnmappableRelationship::encountered($exception, $this->property, $from, $id);
             }
         }

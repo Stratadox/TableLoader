@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c78317f8d93aa3b315054f68ce75c443",
+    "content-hash": "c959e948b562b0ccae11c30ef2363c86",
     "packages": [
         {
             "name": "stratadox/collection-contracts",
@@ -45,20 +45,23 @@
         },
         {
             "name": "stratadox/hydrator-contracts",
-            "version": "v0.1.1",
+            "version": "v0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Stratadox/HydratorContracts.git",
-                "reference": "c1bbfa077eebce3b20523f3e718c2cb45603bc26"
+                "reference": "a842587dba9082a94dc2b84b7773396ecb8ddf07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Stratadox/HydratorContracts/zipball/c1bbfa077eebce3b20523f3e718c2cb45603bc26",
-                "reference": "c1bbfa077eebce3b20523f3e718c2cb45603bc26",
+                "url": "https://api.github.com/repos/Stratadox/HydratorContracts/zipball/a842587dba9082a94dc2b84b7773396ecb8ddf07",
+                "reference": "a842587dba9082a94dc2b84b7773396ecb8ddf07",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
+            },
+            "suggest": {
+                "stratadox/hydrator": "For loading objects according to this interface."
             },
             "type": "library",
             "autoload": {
@@ -76,7 +79,7 @@
                     "homepage": "http://www.stratadox.com/"
                 }
             ],
-            "time": "2018-01-30T22:22:34+00:00"
+            "time": "2018-04-24T16:06:03+00:00"
         },
         {
             "name": "stratadox/immutable-collection",
@@ -2718,22 +2721,22 @@
         },
         {
             "name": "stratadox/hydration-mapper-contracts",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Stratadox/HydrationMapperContracts.git",
-                "reference": "053c6ba2c5a5e03deedda7c008002284f45d4038"
+                "reference": "0c9ba8c42c09abfefd760d06847c64590b5f5926"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Stratadox/HydrationMapperContracts/zipball/053c6ba2c5a5e03deedda7c008002284f45d4038",
-                "reference": "053c6ba2c5a5e03deedda7c008002284f45d4038",
+                "url": "https://api.github.com/repos/Stratadox/HydrationMapperContracts/zipball/0c9ba8c42c09abfefd760d06847c64590b5f5926",
+                "reference": "0c9ba8c42c09abfefd760d06847c64590b5f5926",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1",
                 "stratadox/hydration-mapping-contracts": "^0.1.2",
-                "stratadox/hydrator-contracts": "^0.1.1",
+                "stratadox/hydrator-contracts": "^0.2",
                 "stratadox/proxy-contracts": "^0.1.0"
             },
             "type": "library",
@@ -2752,7 +2755,7 @@
                     "homepage": "http://www.stratadox.com/"
                 }
             ],
-            "time": "2018-04-03T22:07:20+00:00"
+            "time": "2018-04-24T19:37:13+00:00"
         },
         {
             "name": "stratadox/hydration-mapping",
@@ -2836,29 +2839,32 @@
         },
         {
             "name": "stratadox/hydrator",
-            "version": "v3.2",
+            "version": "v3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Stratadox/Hydrator.git",
-                "reference": "6ef60a7131bbaad34d56be3cb3085b1693220e04"
+                "reference": "29674ef183f70ccbc5b226c5e41888600ddda6c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Stratadox/Hydrator/zipball/6ef60a7131bbaad34d56be3cb3085b1693220e04",
-                "reference": "6ef60a7131bbaad34d56be3cb3085b1693220e04",
+                "url": "https://api.github.com/repos/Stratadox/Hydrator/zipball/29674ef183f70ccbc5b226c5e41888600ddda6c9",
+                "reference": "29674ef183f70ccbc5b226c5e41888600ddda6c9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1",
-                "stratadox/hydration-mapping-contracts": "^0.1.0",
-                "stratadox/hydrator-contracts": "^0.1.0",
+                "stratadox/hydration-mapping-contracts": "^0.1.2",
+                "stratadox/hydrator-contracts": "^0.2",
                 "stratadox/instantiator": "^0.1.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "^0.9.2",
                 "phpunit/phpunit": "^7.1",
                 "satooshi/php-coveralls": "^2.0",
-                "stratadox/immutable-collection": "^1.0"
+                "stratadox/immutable-collection": "^1.1"
+            },
+            "suggest": {
+                "stratadox/hydration-mapping": "For mapping the hydration data."
             },
             "type": "library",
             "autoload": {
@@ -2876,25 +2882,25 @@
                     "homepage": "http://www.stratadox.com/"
                 }
             ],
-            "time": "2018-04-15T21:10:46+00:00"
+            "time": "2018-04-24T17:56:17+00:00"
         },
         {
             "name": "stratadox/proxy",
-            "version": "v0.1.3",
+            "version": "v0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Stratadox/Proxy.git",
-                "reference": "b80a88fe33a381b6303119da271e4d5a7eebbf0a"
+                "reference": "874d8a24d932d27edae15f0a2ff40bd775f19498"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Stratadox/Proxy/zipball/b80a88fe33a381b6303119da271e4d5a7eebbf0a",
-                "reference": "b80a88fe33a381b6303119da271e4d5a7eebbf0a",
+                "url": "https://api.github.com/repos/Stratadox/Proxy/zipball/874d8a24d932d27edae15f0a2ff40bd775f19498",
+                "reference": "874d8a24d932d27edae15f0a2ff40bd775f19498",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1",
-                "stratadox/hydrator-contracts": "^0.1.1",
+                "stratadox/hydrator-contracts": "^0.2",
                 "stratadox/proxy-contracts": "^0.1.0"
             },
             "require-dev": {
@@ -2920,7 +2926,7 @@
                     "homepage": "http://www.stratadox.com/"
                 }
             ],
-            "time": "2018-04-16T10:29:56+00:00"
+            "time": "2018-04-24T19:45:30+00:00"
         },
         {
             "name": "stratadox/proxy-contracts",

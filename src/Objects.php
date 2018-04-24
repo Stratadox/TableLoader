@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
-use Stratadox\Hydrator\CouldNotHydrate;
+use Stratadox\Hydrator\CannotHydrate;
 use Stratadox\Hydrator\Hydrates;
 
 /**
@@ -56,7 +56,7 @@ final class Objects implements MakesObjects
             if (!isset($objects[$id])) {
                 try {
                     $objects[$id] = $this->hydrate->fromArray($row);
-                } catch (CouldNotHydrate $exception) {
+                } catch (CannotHydrate $exception) {
                     throw UnmappableRow::encountered($exception, $label, $row);
                 }
             }
