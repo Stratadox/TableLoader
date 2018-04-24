@@ -190,6 +190,10 @@ assert(count($course['Toolset maintenance']->subscribedStudents()) === 1);
 
 ## To do
 
+- Integrate with identity map!!
+- Differentiate between row identification purposes
+    - Loading: Semi-include `type` in id for STI?
+    - Identity map: Exclude things like type.
 - Self-referring join support.
 - Deal with (/ignore) nulls.
 - Three-way join support.
