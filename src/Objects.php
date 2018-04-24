@@ -52,7 +52,7 @@ final class Objects implements MakesObjects
         $label = $this->relevantData->label();
         $objects = [];
         foreach ($data as $row) {
-            $id = $this->identifier->for($row);
+            $id = $this->identifier->forLoading($row);
             if (!isset($objects[$id])) {
                 try {
                     $objects[$id] = $this->hydrate->fromArray($row);

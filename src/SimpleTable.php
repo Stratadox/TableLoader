@@ -49,8 +49,9 @@ final class SimpleTable implements LoadsTable
     {
         $objects = [];
         foreach ($input as $row) {
+            $tag = $this->identity->forLoading($row);
             try {
-                $objects[$this->identity->for($row)] = $this->make->fromArray($row);
+                $objects[$tag] = $this->make->fromArray($row);
             } catch (CouldNotHydrate $exception) {
                 throw UnmappableRow::encountered($exception, $this->label, $row);
             }

@@ -10,11 +10,30 @@ namespace Stratadox\TableLoader;
 interface IdentifiesEntities
 {
     /**
-     * Retrieves a string representation that can identify the entity.
+     * Defines additional identification fields for during the loading process.
+     *
+     * @param string ...$columns
+     * @return IdentifiesEntities
+     */
+    public function andForLoading(string ...$columns): IdentifiesEntities;
+
+    /**
+     * Retrieves a string representation that can identify the entity during the
+     * loading process.
      *
      * @param array $row            The data to identify.
      * @return string               A string representation of the identifier.
      * @throws CannotIdentifyEntity When identifying columns are missing.
      */
-    public function for(array $row): string;
+    public function forLoading(array $row): string;
+
+    /**
+     * Retrieves a string representation that can identify the entity for in the
+     * identity map.
+     *
+     * @param array $row            The data to identify.
+     * @return string               A string representation of the identifier.
+     * @throws CannotIdentifyEntity When identifying columns are missing.
+     */
+    public function forIdentityMap(array $row): string;
 }

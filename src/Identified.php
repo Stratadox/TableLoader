@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
+use function array_merge;
 use function implode;
 use function str_replace as replace;
 
@@ -17,10 +18,12 @@ final class Identified implements IdentifiesEntities
     private const SOLUTIONS = ['\\\\', '\\:'];
 
     private $identifyingColumns;
+    private $columnsForLoading;
 
-    private function __construct(string ...$identifyingColumns)
+    private function __construct(array $identifyingColumns, array $forLoading)
     {
         $this->identifyingColumns = $identifyingColumns;
+        $this->columnsForLoading = $forLoading;
     }
 
     /**
@@ -28,18 +31,37 @@ final class Identified implements IdentifiesEntities
      *
      * @param string ...$identifyingColumns The columns to use for identification.
      *
-     * @return Identified                  The identifying object.
+     * @return Identified                   The identifying object.
      */
     public static function by(string ...$identifyingColumns): self
     {
-        return new self(...$identifyingColumns);
+        return new self($identifyingColumns, []);
+    }
+
+    public function andForLoading(string ...$columns): IdentifiesEntities
+    {
+        return new self($this->identifyingColumns, $columns);
+    }
+
+    public function forIdentityMap(array $row): string
+    {
+        return $this->identifierFor($row, $this->identifyingColumns);
     }
 
     /** @inheritdoc */
-    public function for(array $row): string
+    public function forLoading(array $row): string
+    {
+        return $this->identifierFor($row, array_merge(
+            $this->identifyingColumns,
+            $this->columnsForLoading
+        ));
+    }
+
+    /** @throws CannotIdentifyEntity */
+    private function identifierFor(array $row, array $identifyingColumns): string
     {
         $id = [];
-        foreach ($this->identifyingColumns as $column) {
+        foreach ($identifyingColumns as $column) {
             $this->mustHave($row, $column);
             $id[] = replace(self::PROBLEMS, self::SOLUTIONS, $row[$column]);
         }

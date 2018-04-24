@@ -44,6 +44,6 @@ final class From implements KnowsWhereToLook
     /** @inheritdoc */
     public function this(array $relationship): string
     {
-        return $this->identity->for($relationship);
+        return $this->identity->forLoading($relationship);
     }
 }
