@@ -20,7 +20,8 @@ class Identified_records_have_identification_keys extends TestCase
 
         $identifier = Identified::by('id');
 
-        $this->assertSame('foo', $identifier->for($row));
+        $this->assertSame('foo', $identifier->forLoading($row));
+        $this->assertSame('foo', $identifier->forIdentityMap($row));
     }
 
     /** @test */
@@ -30,7 +31,42 @@ class Identified_records_have_identification_keys extends TestCase
 
         $identifier = Identified::by('company_id', 'employee_id');
 
-        $this->assertSame('2:14', $identifier->for($row));
+        $this->assertSame('2:14', $identifier->forLoading($row));
+        $this->assertSame('2:14', $identifier->forIdentityMap($row));
+    }
+
+    /** @test */
+    function computing_the_identifier_for_loading_the_instance()
+    {
+        $row = ['id' => 12, 'type' => 1];
+
+        $identifier = Identified::by('id')->andForLoading('type');
+
+        $this->assertSame('12:1', $identifier->forLoading($row));
+    }
+
+    /** @test */
+    function computing_the_identifier_for_the_identity_map()
+    {
+        $row = ['id' => 12, 'type' => 1];
+
+        $identifier = Identified::by('id')->andForLoading('type');
+
+        $this->assertSame('12', $identifier->forIdentityMap($row));
+    }
+
+    /** @test */
+    function differentiating_between_identifiers_for_loading_and_for_in_the_identity_map()
+    {
+        $identifier = Identified::by('first', 'second')->andForLoading('type');
+        $row = ['first' => 1, 'second' => 2, 'type' => 'A'];
+
+        $this->assertNotEquals(
+            $identifier->forLoading($row),
+            $identifier->forIdentityMap($row)
+        );
+        $this->assertSame('1:2:A', $identifier->forLoading($row));
+        $this->assertSame('1:2', $identifier->forIdentityMap($row));
     }
 
     /** @test */
@@ -39,8 +75,12 @@ class Identified_records_have_identification_keys extends TestCase
         $identifier = Identified::by('first', 'second');
 
         $this->assertNotEquals(
-            $identifier->for(['first' => '_:_', 'second' => '_']),
-            $identifier->for(['first' => '_', 'second' => '_:_'])
+            $identifier->forLoading(['first' => '_:_', 'second' => '_']),
+            $identifier->forLoading(['first' => '_', 'second' => '_:_'])
+        );
+        $this->assertNotEquals(
+            $identifier->forIdentityMap(['first' => '_:_', 'second' => '_']),
+            $identifier->forIdentityMap(['first' => '_', 'second' => '_:_'])
         );
     }
 
@@ -50,8 +90,12 @@ class Identified_records_have_identification_keys extends TestCase
         $identifier = Identified::by('first', 'second');
 
         $this->assertNotEquals(
-            $identifier->for(['first' => '_:_\\', 'second' => '_']),
-            $identifier->for(['first' => '_\\', 'second' => '_:_'])
+            $identifier->forLoading(['first' => '_:_\\', 'second' => '_']),
+            $identifier->forLoading(['first' => '_\\', 'second' => '_:_'])
+        );
+        $this->assertNotEquals(
+            $identifier->forIdentityMap(['first' => '_:_\\', 'second' => '_']),
+            $identifier->forIdentityMap(['first' => '_\\', 'second' => '_:_'])
         );
     }
 
@@ -61,9 +105,11 @@ class Identified_records_have_identification_keys extends TestCase
         $identifier = Identified::by('id');
 
         $this->expectException(CannotIdentifyEntity::class);
-        $this->expectExceptionMessage('Missing the identifying column `id` in the input data: []');
+        $this->expectExceptionMessage(
+            'Missing the identifying column `id` in the input data: []'
+        );
 
-        $identifier->for([]);
+        $identifier->forIdentityMap([]);
     }
 
     /** @test */
@@ -72,8 +118,23 @@ class Identified_records_have_identification_keys extends TestCase
         $identifier = Identified::by('foo', 'bar');
 
         $this->expectException(CannotIdentifyEntity::class);
-        $this->expectExceptionMessage('Missing the identifying column `bar` in the input data: {"foo":"bar"}');
+        $this->expectExceptionMessage(
+            'Missing the identifying column `bar` in the input data: {"foo":"bar"}'
+        );
 
-        $identifier->for(['foo' => 'bar']);
+        $identifier->forIdentityMap(['foo' => 'bar']);
+    }
+
+    /** @test */
+    function throwing_an_exception_when_the_identifying_field_is_missing_for_loading()
+    {
+        $identifier = Identified::by('id')->andForLoading('type');
+
+        $this->expectException(CannotIdentifyEntity::class);
+        $this->expectExceptionMessage(
+            'Missing the identifying column `type` in the input data: {"id":1}'
+        );
+
+        $identifier->forLoading(['id' => 1]);
     }
 }
