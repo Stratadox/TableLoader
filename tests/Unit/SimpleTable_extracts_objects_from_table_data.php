@@ -34,8 +34,8 @@ class SimpleTable_extracts_objects_from_table_data extends TestCase
 
         $things = $makeObjects->from($data)['thing'];
 
-        $this->assertEquals(new Thing(1, 'foo'), $things['1']);
-        $this->assertEquals(new Thing(2, 'bar'), $things['2']);
+        $this->assertEquals(new Thing(1, 'foo'), $things['#1']);
+        $this->assertEquals(new Thing(2, 'bar'), $things['#2']);
     }
 
     /** @test */

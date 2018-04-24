@@ -55,15 +55,15 @@ class Clubs_have_Members extends TestCase
         /** @var Member[] $members */
         $members = $objects['member'];
 
-        $chuckNorris = $members['1'];
-        $jackieChan = $members['2'];
-        $johnDoe = $members['3'];
-        $jamesKirk = $members['4'];
-        $darthVader = $members['5'];
+        $chuckNorris = $members['#1'];
+        $jackieChan = $members['#2'];
+        $johnDoe = $members['#3'];
+        $jamesKirk = $members['#4'];
+        $darthVader = $members['#5'];
 
-        $fooDeLaClub = $clubs['1'];
-        $theFooBar = $clubs['2'];
-        $spaceClub = $clubs['3'];
+        $fooDeLaClub = $clubs['#1'];
+        $theFooBar = $clubs['#2'];
+        $spaceClub = $clubs['#3'];
 
         $this->assertSame('Chuck Norris', $chuckNorris->name());
         $this->assertSame('Jackie Chan', $jackieChan->name());
@@ -97,13 +97,13 @@ class Clubs_have_Members extends TestCase
     {
         $chuckNorris = Member::named('Chuck Norris');
         $club = [
-            '1' => Club::establishedBy($chuckNorris, 'Foo de la Club'),
-            '2' => Club::establishedBy($chuckNorris, 'The Foo Bar'),
-            '3' => Club::establishedBy(Member::named('Captain Kirk'), 'Space Club'),
+            '#1' => Club::establishedBy($chuckNorris, 'Foo de la Club'),
+            '#2' => Club::establishedBy($chuckNorris, 'The Foo Bar'),
+            '#3' => Club::establishedBy(Member::named('Captain Kirk'), 'Space Club'),
         ];
-        Member::named('Jackie Chan')->join($club['1']);
-        Member::named('John Doe')->join($club['2']);
-        Member::named('Darth Vader')->join($club['3']);
+        Member::named('Jackie Chan')->join($club['#1']);
+        Member::named('John Doe')->join($club['#2']);
+        Member::named('Darth Vader')->join($club['#3']);
         return $club;
     }
 }

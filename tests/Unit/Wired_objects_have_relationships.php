@@ -71,14 +71,14 @@ class Wired_objects_have_relationships extends TestCase
         ];
         $objects = [
             'member' => [
-                'john' => $john,
-                'foo' => $foo,
-                'jackie' => $jackie,
-                'chuck' => $chuck,
+                '#john' => $john,
+                '#foo' => $foo,
+                '#jackie' => $jackie,
+                '#chuck' => $chuck,
             ],
             'group' => [
-                '1' => $default,
-                '2' => $vip,
+                '#1' => $default,
+                '#2' => $vip,
             ],
         ];
 

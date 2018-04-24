@@ -20,8 +20,8 @@ class Identified_records_have_identification_keys extends TestCase
 
         $identifier = Identified::by('id');
 
-        $this->assertSame('foo', $identifier->forLoading($row));
-        $this->assertSame('foo', $identifier->forIdentityMap($row));
+        $this->assertSame('#foo', $identifier->forLoading($row));
+        $this->assertSame('#foo', $identifier->forIdentityMap($row));
     }
 
     /** @test */
@@ -31,8 +31,8 @@ class Identified_records_have_identification_keys extends TestCase
 
         $identifier = Identified::by('company_id', 'employee_id');
 
-        $this->assertSame('2:14', $identifier->forLoading($row));
-        $this->assertSame('2:14', $identifier->forIdentityMap($row));
+        $this->assertSame('#2:14', $identifier->forLoading($row));
+        $this->assertSame('#2:14', $identifier->forIdentityMap($row));
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class Identified_records_have_identification_keys extends TestCase
 
         $identifier = Identified::by('id')->andForLoading('type');
 
-        $this->assertSame('12:1', $identifier->forLoading($row));
+        $this->assertSame('#12:1', $identifier->forLoading($row));
     }
 
     /** @test */
@@ -52,7 +52,7 @@ class Identified_records_have_identification_keys extends TestCase
 
         $identifier = Identified::by('id')->andForLoading('type');
 
-        $this->assertSame('12', $identifier->forIdentityMap($row));
+        $this->assertSame('#12', $identifier->forIdentityMap($row));
     }
 
     /** @test */
@@ -65,8 +65,8 @@ class Identified_records_have_identification_keys extends TestCase
             $identifier->forLoading($row),
             $identifier->forIdentityMap($row)
         );
-        $this->assertSame('1:2:A', $identifier->forLoading($row));
-        $this->assertSame('1:2', $identifier->forIdentityMap($row));
+        $this->assertSame('#1:2:A', $identifier->forLoading($row));
+        $this->assertSame('#1:2', $identifier->forIdentityMap($row));
     }
 
     /** @test */

@@ -52,14 +52,14 @@ class HasOne_finds_the_one extends TestCase
         $vip  = new Group('VIP');
         $objects = [
             'member' => [
-                'john' => new Member('John Doe'),
-                'foo' => new Member('Foo Bar'),
-                'jackie' => new Member('Jackie Chan'),
-                'chuck' => new Member('Chuck Norris'),
+                '#john' => new Member('John Doe'),
+                '#foo' => new Member('Foo Bar'),
+                '#jackie' => new Member('Jackie Chan'),
+                '#chuck' => new Member('Chuck Norris'),
             ],
             'group' => [
-                '1' => $default,
-                '2' => $vip,
+                '#1' => $default,
+                '#2' => $vip,
             ],
         ];
 
@@ -70,9 +70,9 @@ class HasOne_finds_the_one extends TestCase
             $objects
         )['group'];
 
-        $this->assertSame($default, $groupOf['john']);
-        $this->assertSame($default, $groupOf['foo']);
-        $this->assertSame($vip, $groupOf['jackie']);
-        $this->assertSame($vip, $groupOf['chuck']);
+        $this->assertSame($default, $groupOf['#john']);
+        $this->assertSame($default, $groupOf['#foo']);
+        $this->assertSame($vip, $groupOf['#jackie']);
+        $this->assertSame($vip, $groupOf['#chuck']);
     }
 }

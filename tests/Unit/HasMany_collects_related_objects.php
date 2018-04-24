@@ -39,13 +39,13 @@ class HasMany_collects_related_objects extends TestCase
         $bar3 = new Bar('Bar 3');
         $objects = [
             'foo' => [
-                '1' => new Foo('Foo!'),
-                '2' => new Foo('Foo?'),
+                '#1' => new Foo('Foo!'),
+                '#2' => new Foo('Foo?'),
             ],
             'bar' => [
-                '1' => $bar1,
-                '2' => $bar2,
-                '3' => $bar3,
+                '#1' => $bar1,
+                '#2' => $bar2,
+                '#3' => $bar3,
             ],
         ];
 
@@ -56,11 +56,11 @@ class HasMany_collects_related_objects extends TestCase
             $objects
         )['bars'];
 
-        $this->assertSame($bar1, $barsForFoo['1'][0]);
-        $this->assertSame($bar2, $barsForFoo['1'][1]);
-        $this->assertSame($bar3, $barsForFoo['1'][2]);
+        $this->assertSame($bar1, $barsForFoo['#1'][0]);
+        $this->assertSame($bar2, $barsForFoo['#1'][1]);
+        $this->assertSame($bar3, $barsForFoo['#1'][2]);
 
-        $this->assertSame($bar2, $barsForFoo['2'][0]);
+        $this->assertSame($bar2, $barsForFoo['#2'][0]);
     }
 
     /** @test */
@@ -77,14 +77,14 @@ class HasMany_collects_related_objects extends TestCase
 
         $objects = [
             'basket' => [
-                'letters' => new Basket('letters', null),
-                'foobar' => new Basket('foobar', null),
+                '#letters' => new Basket('letters', null),
+                '#foobar' => new Basket('foobar', null),
             ],
             'thing' => [
-                'A' => new Thing(1, 'A'),
-                'B' => new Thing(2, 'B'),
-                'Foo' => new Thing(3, 'Foo'),
-                'Bar' => new Thing(4, 'Bar'),
+                '#A' => new Thing(1, 'A'),
+                '#B' => new Thing(2, 'B'),
+                '#Foo' => new Thing(3, 'Foo'),
+                '#Bar' => new Thing(4, 'Bar'),
             ]
         ];
 
@@ -97,12 +97,12 @@ class HasMany_collects_related_objects extends TestCase
 
         $this->assertEquals(
             new Things(new Thing(1, 'A'), new Thing(2, 'B')),
-            $thingsForInBasket['letters']
+            $thingsForInBasket['#letters']
         );
 
         $this->assertEquals(
             new Things(new Thing(3, 'Foo'), new Thing(4, 'Bar')),
-            $thingsForInBasket['foobar']
+            $thingsForInBasket['#foobar']
         );
     }
 
@@ -113,14 +113,14 @@ class HasMany_collects_related_objects extends TestCase
 
         $data = [['thing_id' => 1, 'thing_name' => 'A', 'basket_name' => 'letters']];
         $objects = [
-            'basket' => ['letters' => new Basket('letters', null)],
-            'thing' => ['A' => new Thing(1, 'A')]
+            'basket' => ['#letters' => new Basket('letters', null)],
+            'thing' => ['#A' => new Thing(1, 'A')]
         ];
 
         $this->expectException(CannotLoadTable::class);
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
-            'Could not map the `things` in the `basket` `letters`: ' .
+            'Could not map the `things` in the `basket` `#letters`: ' .
             'Could not load the class `' . ExceptionalThings::class . '`: ' .
             'Original exception message here.'
         );

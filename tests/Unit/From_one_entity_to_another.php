@@ -23,6 +23,6 @@ class From_one_entity_to_another extends TestCase
     function knowing_who_we_map_from()
     {
         $from = From::the('foo', Identified::by('name'));
-        $this->assertSame('A', $from->this(['name' => 'A']));
+        $this->assertSame('#A', $from->this(['name' => 'A']));
     }
 }
