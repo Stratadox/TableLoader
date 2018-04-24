@@ -44,8 +44,8 @@ $make = SimpleTable::converter(
 
 $things = $make->from($data)['thing'];
 
-assert($things['1']->equals(new Thing(1, 'foo')));
-assert($things['2']->equals(new Thing(2, 'bar')));
+assert($things['#1']->equals(new Thing(1, 'foo')));
+assert($things['#2']->equals(new Thing(2, 'bar')));
 ```
 
 Assuming for table:
@@ -92,13 +92,13 @@ $actualClubs = $make->from($data)['club'];
 
 $chuckNorris = Member::named('Chuck Norris');
 $expectedClubs = [
-    '1' => Club::establishedBy($chuckNorris, 'Kick-ass Club'),
-    '2' => Club::establishedBy($chuckNorris, 'The Foo Bar'),
-    '3' => Club::establishedBy(Member::named('Captain Kirk'), 'Space Club'),
+    '#1' => Club::establishedBy($chuckNorris, 'Kick-ass Club'),
+    '#2' => Club::establishedBy($chuckNorris, 'The Foo Bar'),
+    '#3' => Club::establishedBy(Member::named('Captain Kirk'), 'Space Club'),
 ];
-Member::named('Jackie Chan')->join($expectedClubs['1']);
-Member::named('John Doe')->join($expectedClubs['2']);
-Member::named('Darth Vader')->join($expectedClubs['3']);
+Member::named('Jackie Chan')->join($expectedClubs['#1']);
+Member::named('John Doe')->join($expectedClubs['#2']);
+Member::named('Darth Vader')->join($expectedClubs['#3']);
 
 
 assert($expectedClubs == $actualClubs);
@@ -136,14 +136,14 @@ $objects = $make->from($data);
 $student = $objects['student'];
 $book = $objects['book'];
 
-assert($student['Alice:of Wonderland']->hasThe($book['Catching rabbits']));
-assert($book['Catching rabbits']->isOwnedBy($student['Alice:of Wonderland']));
+assert($student['#Alice:of Wonderland']->hasThe($book['#Catching rabbits']));
+assert($book['#Catching rabbits']->isOwnedBy($student['#Alice:of Wonderland']));
 
-assert($student['Bob:the Builder']->hasThe($book['Toolset maintenance']));
-assert($book['Toolset maintenance']->isOwnedBy($student['Bob:the Builder']));
+assert($student['#Bob:the Builder']->hasThe($book['#Toolset maintenance']));
+assert($book['#Toolset maintenance']->isOwnedBy($student['#Bob:the Builder']));
 
-assert($student['Alice:of Wonderland']->name() instanceof Name);
-assert('Alice of Wonderland' === (string) $student['Alice:of Wonderland']->name());
+assert($student['#Alice:of Wonderland']->name() instanceof Name);
+assert('Alice of Wonderland' === (string) $student['#Alice:of Wonderland']->name());
 ```
 
 ### Many-to-many relationship:
@@ -175,28 +175,26 @@ $objects = $make->from($data);
 $student = $objects['student'];
 $course = $objects['course'];
 
-assert($student['Alice']->follows($course['Catching rabbits']));
-assert($student['Alice']->follows($course['Hacking 101']));
-assert($student['Alice']->doesNotFollow($course['Toolset maintenance']));
+assert($student['#Alice']->follows($course['#Catching rabbits']));
+assert($student['#Alice']->follows($course['#Hacking 101']));
+assert($student['#Alice']->doesNotFollow($course['#Toolset maintenance']));
 
-assert($student['Bob']->doesNotFollow($course['Catching rabbits']));
-assert($student['Bob']->follows($course['Hacking 101']));
-assert($student['Bob']->follows($course['Toolset maintenance']));
+assert($student['#Bob']->doesNotFollow($course['#Catching rabbits']));
+assert($student['#Bob']->follows($course['#Hacking 101']));
+assert($student['#Bob']->follows($course['#Toolset maintenance']));
 
-assert(count($course['Catching rabbits']->subscribedStudents()) === 1);
-assert(count($course['Hacking 101']->subscribedStudents()) === 2);
-assert(count($course['Toolset maintenance']->subscribedStudents()) === 1);
+assert(count($course['#Catching rabbits']->subscribedStudents()) === 1);
+assert(count($course['#Hacking 101']->subscribedStudents()) === 2);
+assert(count($course['#Toolset maintenance']->subscribedStudents()) === 1);
 ```
 
 ## To do
 
 - Integrate with identity map!!
-- Differentiate between row identification purposes
-    - Loading: Semi-include `type` in id for STI?
-    - Identity map: Exclude things like type.
 - Self-referring join support.
 - Deal with (/ignore) nulls.
 - Three-way join support.
 - Hydrator injection in joined table builder.
 - More unhappy path testing.
 - Single table inheritance in main entities.
+- Use `id` as default identification column.
