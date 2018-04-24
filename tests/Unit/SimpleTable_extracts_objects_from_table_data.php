@@ -6,6 +6,7 @@ namespace Stratadox\TableLoader\Test\Unit;
 use PHPUnit\Framework\TestCase;
 use Stratadox\Hydrator\MappedHydrator;
 use Stratadox\Hydrator\SimpleHydrator;
+use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\TableLoader\CannotLoadTable;
 use Stratadox\TableLoader\Identified;
 use Stratadox\TableLoader\SimpleTable;
@@ -36,6 +37,29 @@ class SimpleTable_extracts_objects_from_table_data extends TestCase
 
         $this->assertEquals(new Thing(1, 'foo'), $things['#1']);
         $this->assertEquals(new Thing(2, 'bar'), $things['#2']);
+    }
+
+    /** @test */
+    function skipping_pre_existing_objects()
+    {
+        $foo = new Thing(1, 'foo');
+        $bar = new Thing(2, 'bar');
+        $identityMap = IdentityMap::with(['#foo' => $foo]);
+        $makeObjects = SimpleTable::converter(
+            'thing',
+            SimpleHydrator::forThe(Thing::class),
+            Identified::by('id')
+        );
+
+        $data = [
+            ['id' => 1, 'name' => 'foo'],
+            ['id' => 2, 'name' => 'bar'],
+        ];
+
+        $things = $makeObjects->from($data, $identityMap)['thing'];
+
+        $this->assertSame($foo, $things['#1']);
+        $this->assertNotSame($bar, $things['#2']);
     }
 
     /** @test */

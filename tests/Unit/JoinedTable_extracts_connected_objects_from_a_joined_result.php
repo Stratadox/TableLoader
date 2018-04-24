@@ -6,6 +6,7 @@ namespace Stratadox\TableLoader\Test\Unit;
 use PHPUnit\Framework\TestCase;
 use Stratadox\Hydrator\SimpleHydrator;
 use Stratadox\Hydrator\VariadicConstructor;
+use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\TableLoader\Extract;
 use Stratadox\TableLoader\From;
 use Stratadox\TableLoader\HasMany;
@@ -161,5 +162,48 @@ class JoinedTable_extracts_connected_objects_from_a_joined_result extends TestCa
             )),
             $baskets['#letters']
         );
+    }
+
+    /** @test */
+    function using_previously_loaded_objects_from_the_identity_map()
+    {
+        $existingBasket = new Basket('foobar', new Things);
+
+        $identityMap = IdentityMap::with([
+            '#foobar' => $existingBasket,
+        ]);
+
+        $makeObjects = JoinedTable::converter(
+            Extract::these(
+                Objects::producedByThis(
+                    SimpleHydrator::forThe(Thing::class),
+                    Prefixed::with('thing'),
+                    Identified::by('id')
+                ),
+                Objects::producedByThis(
+                    SimpleHydrator::forThe(Basket::class),
+                    Prefixed::with('basket'),
+                    Identified::by('name')
+                )
+            ),
+            Wired::together(
+                Wire::it(
+                    From::the('basket', Identified::by('basket_name')),
+                    To::the('thing', Identified::by('thing_id')),
+                    HasMany::in('things', VariadicConstructor::forThe(Things::class))
+                )
+            )
+        );
+
+        $tableData = [
+            ['thing_id' => 1, 'thing_name' => 'Foo', 'basket_name' => 'foobar'],
+            ['thing_id' => 2, 'thing_name' => 'Bar', 'basket_name' => 'foobar'],
+            ['thing_id' => 3, 'thing_name' => 'Baz', 'basket_name' => 'foobar'],
+        ];
+
+        $baskets = $makeObjects->from($tableData, $identityMap)['basket'];
+
+        $this->assertSame($existingBasket, $baskets['#foobar']);
+        $this->assertCount(3, $existingBasket->things());
     }
 }
