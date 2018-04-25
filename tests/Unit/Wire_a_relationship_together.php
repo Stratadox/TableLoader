@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace Stratadox\TableLoader\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\TableLoader\From;
 use Stratadox\TableLoader\HasMany;
 use Stratadox\TableLoader\Identified;
+use Stratadox\TableLoader\Result;
 use Stratadox\TableLoader\Test\Unit\Fixture\Bar;
 use Stratadox\TableLoader\Test\Unit\Fixture\Foo;
 use Stratadox\TableLoader\To;
@@ -32,13 +34,13 @@ class Wire_a_relationship_together extends TestCase
         $foo = new Foo('foo1');
         $bar1 = new Bar('bar1');
         $bar2 = new Bar('bar2');
-        $objects = [
+        $objects = Result::fromArray([
             'foo' => ['#foo1' => $foo],
             'bar' => [
                 '#bar1' => $bar1,
                 '#bar2' => $bar2,
             ],
-        ];
+        ]);
 
         $connection->wire($objects, $data);
 

@@ -49,6 +49,7 @@ class Boxes_filled_with_Things extends TestCase
         )();
 
         $result = $make->from($table, $identityMap);
+        $identityMap = $result->identityMap();
 
         $this->assertSame(
             $foo,

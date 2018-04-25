@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
+use Stratadox\TableLoader\ContainsResultingObjects as Result;
+
 /**
  * Wires a relationship together.
  *
@@ -45,7 +47,7 @@ final class Wire implements WiresObjects
     }
 
     /** @inheritdoc */
-    public function wire(array $objects, array $data): void
+    public function wire(Result $objects, array $data): void
     {
         $relationships = $this->relation->load(
             $this->from,

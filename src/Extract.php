@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
+use Stratadox\IdentityMap\MapsObjectsByIdentity as Map;
+
 /**
  * Makes partially hydrated objects from an input array.
  *
@@ -30,12 +32,15 @@ final class Extract implements MakesObjects
     }
 
     /** @inheritdoc */
-    public function from(array $input): array
+    public function from(array $input, Map $map): ContainsResultingObjects
     {
-        $output = [];
+        $result = Result::fromArray([], $map);
         foreach ($this->objects as $objects) {
-            $output += $objects->from($input);
+            $result = $result->mergeWith($objects->from(
+                $input,
+                $result->identityMap()
+            ));
         }
-        return $output;
+        return $result;
     }
 }

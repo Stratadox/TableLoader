@@ -9,6 +9,7 @@ use Stratadox\TableLoader\CannotLoadTable;
 use Stratadox\TableLoader\From;
 use Stratadox\TableLoader\HasMany;
 use Stratadox\TableLoader\Identified;
+use Stratadox\TableLoader\Result;
 use Stratadox\TableLoader\Test\Unit\Fixture\Bar;
 use Stratadox\TableLoader\Test\Unit\Fixture\Basket;
 use Stratadox\TableLoader\Test\Unit\Fixture\ExceptionalThings;
@@ -37,7 +38,7 @@ class HasMany_collects_related_objects extends TestCase
         $bar1 = new Bar('Bar 1');
         $bar2 = new Bar('Bar 2');
         $bar3 = new Bar('Bar 3');
-        $objects = [
+        $objects = Result::fromArray([
             'foo' => [
                 '#1' => new Foo('Foo!'),
                 '#2' => new Foo('Foo?'),
@@ -47,7 +48,7 @@ class HasMany_collects_related_objects extends TestCase
                 '#2' => $bar2,
                 '#3' => $bar3,
             ],
-        ];
+        ]);
 
         $barsForFoo = $relation->load(
             From::the('foo', Identified::by('foo_id')),
@@ -75,7 +76,7 @@ class HasMany_collects_related_objects extends TestCase
             ['thing_id' => 4, 'thing_name' => 'Bar', 'basket_name' => 'foobar'],
         ];
 
-        $objects = [
+        $objects = Result::fromArray([
             'basket' => [
                 '#letters' => new Basket('letters', null),
                 '#foobar' => new Basket('foobar', null),
@@ -86,7 +87,7 @@ class HasMany_collects_related_objects extends TestCase
                 '#Foo' => new Thing(3, 'Foo'),
                 '#Bar' => new Thing(4, 'Bar'),
             ]
-        ];
+        ]);
 
         $thingsForInBasket = $relation->load(
             From::the('basket', Identified::by('basket_name')),
@@ -112,10 +113,10 @@ class HasMany_collects_related_objects extends TestCase
         $relation = HasMany::in('things', VariadicConstructor::forThe(ExceptionalThings::class));
 
         $data = [['thing_id' => 1, 'thing_name' => 'A', 'basket_name' => 'letters']];
-        $objects = [
+        $objects = Result::fromArray([
             'basket' => ['#letters' => new Basket('letters', null)],
             'thing' => ['#A' => new Thing(1, 'A')]
-        ];
+        ]);
 
         $this->expectException(CannotLoadTable::class);
         $this->expectExceptionCode(0);

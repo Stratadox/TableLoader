@@ -2,6 +2,8 @@
 
 namespace Stratadox\TableLoader;
 
+use Stratadox\TableLoader\ContainsResultingObjects as Result;
+
 /**
  * Loads relationships.
  *
@@ -15,7 +17,7 @@ interface MakesConnections
      * @param KnowsWhereToLook $from    Where to map from.
      * @param array[]          $data    List of associative rows.
      * @param KnowsWhereToLook $to      Where to map to.
-     * @param object[][]       $objects List of objects as [label => [id => instance]].
+     * @param Result           $objects List of objects as [label => [id => instance]].
      * @return array[]                  Relations as [$property => $relation]
      * @throws CannotLoadTable
      */
@@ -23,6 +25,6 @@ interface MakesConnections
         KnowsWhereToLook $from,
         array $data,
         KnowsWhereToLook $to,
-        array $objects
+        Result $objects
     ): array;
 }

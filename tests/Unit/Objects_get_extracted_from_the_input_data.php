@@ -6,6 +6,7 @@ namespace Stratadox\TableLoader\Test\Unit;
 use PHPUnit\Framework\TestCase;
 use Stratadox\Hydrator\MappedHydrator;
 use Stratadox\Hydrator\SimpleHydrator;
+use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\TableLoader\CannotLoadTable;
 use Stratadox\TableLoader\Identified;
 use Stratadox\TableLoader\Objects;
@@ -34,7 +35,7 @@ class Objects_get_extracted_from_the_input_data extends TestCase
             Prefixed::with('thing'),
             Identified::by('id')
         );
-        $resulting = $objects->from($tableData);
+        $resulting = $objects->from($tableData, IdentityMap::startEmpty());
 
         $this->assertArrayHasKey('thing', $resulting);
 
@@ -50,6 +51,41 @@ class Objects_get_extracted_from_the_input_data extends TestCase
         $this->assertSame(1, $things['#1']->id());
         $this->assertSame(2, $things['#2']->id());
         $this->assertSame(3, $things['#3']->id());
+    }
+
+    /** @test */
+    function using_previously_loaded_objects_from_the_identity_map()
+    {
+        $foo = new Thing(1, 'Foo');
+        $bar = new Thing(2, 'Bar');
+
+        $tableData = [
+            ['thing_id' => 1, 'thing_name' => 'Foo'],
+            ['thing_id' => 2, 'thing_name' => 'Bar'],
+            ['thing_id' => 3, 'thing_name' => 'Baz'],
+        ];
+
+        $objects = Objects::producedByThis(
+            SimpleHydrator::forThe(Thing::class),
+            Prefixed::with('thing'),
+            Identified::by('id')
+        );
+
+        $identityMap = IdentityMap::with([
+            '#1' => $foo
+        ]);
+
+        $resulting = $objects->from($tableData, $identityMap);
+
+        $this->assertArrayHasKey('thing', $resulting);
+
+        /** @var iterable|Thing[] $things */
+        $things = $resulting['thing'];
+
+        $this->assertSame($foo, $things['#1']);
+
+        $this->assertEquals($bar, $things['#2']);
+        $this->assertNotSame($bar, $things['#2']);
     }
 
     /** @test */
@@ -71,6 +107,8 @@ class Objects_get_extracted_from_the_input_data extends TestCase
             'Original exception message here.'
         );
 
-        $objects->from([['thing_id' => 1, 'thing_name' => 'Foo']]);
+        $objects->from([
+            ['thing_id' => 1, 'thing_name' => 'Foo']
+        ], IdentityMap::startEmpty());
     }
 }

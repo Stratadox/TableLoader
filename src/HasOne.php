@@ -34,7 +34,7 @@ final class HasOne implements MakesConnections
         KnowsWhereToLook $from,
         array $data,
         KnowsWhereToLook $to,
-        array $objects
+        ContainsResultingObjects $objects
     ): array {
         $relations = [];
         foreach ($data as $relation) {

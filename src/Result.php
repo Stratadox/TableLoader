@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
+use ArrayIterator;
 use BadMethodCallException;
 use Exception;
+use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\IdentityMap\MapsObjectsByIdentity;
+use Traversable;
 
 final class Result implements ContainsResultingObjects
 {
@@ -32,15 +35,83 @@ final class Result implements ContainsResultingObjects
      */
     public static function fromArray(
         array $objects,
-        MapsObjectsByIdentity $identityMap
+        MapsObjectsByIdentity $identityMap = null
     ): ContainsResultingObjects {
-        return new self($objects, $identityMap);
+        return new self($objects, $identityMap ?: IdentityMap::startEmpty());
+    }
+
+    /** @inheritdoc */
+    public function has(string $class, string $id): bool
+    {
+        return $this->identityMap->has($class, $id);
+    }
+
+    /** @inheritdoc */
+    public function get(string $class, string $id)
+    {
+        return $this->identityMap->get($class, $id);
+    }
+
+    /** @inheritdoc */
+    public function add(
+        string $label,
+        string $idForLoading,
+        string $idForMap,
+        $object
+    ): ContainsResultingObjects {
+        return new self($this->merge(
+            $this->objects,
+            [$label => [$idForLoading => $object]]
+        ), $this->identityMap->add($idForMap, $object));
+    }
+
+    /** @inheritdoc */
+    public function mergeWith(
+        ContainsResultingObjects $otherObjects
+    ): ContainsResultingObjects {
+        return new self(
+            $this->merge($this->objects, $otherObjects),
+            $otherObjects->identityMap()
+        );
+    }
+
+    /** @inheritdoc */
+    public function include(
+        string $label,
+        string $id,
+        $object
+    ): ContainsResultingObjects {
+        return new self($this->merge(
+            $this->objects,
+            [$label => [$id => $object]]
+        ), $this->identityMap);
+    }
+
+    /**
+     * @param object[][] $result
+     * @param object[][] $with
+     * @return array
+     */
+    private function merge(iterable $result, iterable $with): array
+    {
+        foreach ($with as $label => $objects) {
+            foreach ($objects as $id => $object) {
+                $result[$label][$id] = $object;
+            }
+        }
+        return $result;
     }
 
     /** @inheritdoc */
     public function identityMap(): MapsObjectsByIdentity
     {
         return $this->identityMap;
+    }
+
+    /** @inheritdoc */
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->objects);
     }
 
     /** @inheritdoc */

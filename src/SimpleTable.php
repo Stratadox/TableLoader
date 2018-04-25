@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
-use Stratadox\Hydrator\CannotHydrate;
 use Stratadox\Hydrator\Hydrates;
+use Stratadox\IdentityMap\IdentityMap;
+use Stratadox\IdentityMap\MapsObjectsByIdentity as Map;
+use Stratadox\TableLoader\ContainsResultingObjects as Objects;
+use Throwable;
 
 /**
  * Converts a table into objects.
@@ -45,17 +48,32 @@ final class SimpleTable implements LoadsTable
     }
 
     /** @inheritdoc */
-    public function from(array $input): array
+    public function from(array $input, Map $map = null): Objects
     {
-        $objects = [];
+        $result = Result::fromArray([], $map ?: IdentityMap::startEmpty());
         foreach ($input as $row) {
-            $tag = $this->identity->forLoading($row);
             try {
-                $objects[$tag] = $this->make->fromArray($row);
-            } catch (CannotHydrate $exception) {
+                $result = $this->loadInto($result, $row);
+            } catch (Throwable $exception) {
                 throw UnmappableRow::encountered($exception, $this->label, $row);
             }
         }
-        return [$this->label => $objects];
+        return $result;
+    }
+
+    /** @throws Throwable */
+    private function loadInto(Objects $result, array $row): Objects
+    {
+        $class = $this->make->classFor($row);
+        $id = $this->identity->forIdentityMap($row);
+        if ($result->has($class, $id)) {
+            return $result->include($this->label, $id, $result->get($class, $id));
+        }
+        return $result->add(
+            $this->label,
+            $this->identity->forLoading($row),
+            $id,
+            $this->make->fromArray($row)
+        );
     }
 }

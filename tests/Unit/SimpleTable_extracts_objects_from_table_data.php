@@ -44,7 +44,7 @@ class SimpleTable_extracts_objects_from_table_data extends TestCase
     {
         $foo = new Thing(1, 'foo');
         $bar = new Thing(2, 'bar');
-        $identityMap = IdentityMap::with(['#foo' => $foo]);
+        $identityMap = IdentityMap::with(['#1' => $foo]);
         $makeObjects = SimpleTable::converter(
             'thing',
             SimpleHydrator::forThe(Thing::class),
@@ -104,6 +104,6 @@ class SimpleTable_extracts_objects_from_table_data extends TestCase
             'Original exception message here.'
         );
 
-        $makeObjects->from([['id' => 1, 'name' => 'foo']]);
+        $makeObjects->from([['id' => 1, 'name' => 'foo']], IdentityMap::startEmpty());
     }
 }

@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Stratadox\TableLoader\From;
 use Stratadox\TableLoader\HasOne;
 use Stratadox\TableLoader\Identified;
+use Stratadox\TableLoader\Result;
 use Stratadox\TableLoader\Test\Unit\Fixture\Group;
 use Stratadox\TableLoader\Test\Unit\Fixture\Member;
 use Stratadox\TableLoader\To;
@@ -50,7 +51,7 @@ class HasOne_finds_the_one extends TestCase
 
         $default = new Group('Default');
         $vip  = new Group('VIP');
-        $objects = [
+        $objects = Result::fromArray([
             'member' => [
                 '#john' => new Member('John Doe'),
                 '#foo' => new Member('Foo Bar'),
@@ -61,7 +62,7 @@ class HasOne_finds_the_one extends TestCase
                 '#1' => $default,
                 '#2' => $vip,
             ],
-        ];
+        ]);
 
         $groupOf = $relation->load(
             From::the('member', Identified::by('member_id')),

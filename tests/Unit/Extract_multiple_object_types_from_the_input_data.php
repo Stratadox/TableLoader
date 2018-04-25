@@ -5,6 +5,7 @@ namespace Stratadox\TableLoader\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Stratadox\Hydrator\SimpleHydrator;
+use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\TableLoader\Identified;
 use Stratadox\TableLoader\Objects;
 use Stratadox\TableLoader\Extract;
@@ -41,7 +42,7 @@ class Extract_multiple_object_types_from_the_input_data extends TestCase
             )
         );
 
-        $objects = $extract->from($tableData);
+        $objects = $extract->from($tableData, IdentityMap::startEmpty());
 
         $this->assertArrayHasKey('foo', $objects);
         $this->assertArrayHasKey('bar', $objects);

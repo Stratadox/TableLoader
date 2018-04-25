@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
+use Stratadox\IdentityMap\IdentityMap;
+use Stratadox\IdentityMap\MapsObjectsByIdentity;
+
 /**
  * Converts a joined table into related objects.
  *
@@ -37,9 +40,12 @@ final class JoinedTable implements LoadsTable
     }
 
     /** @inheritdoc */
-    public function from(array $input): array
-    {
-        $objects = $this->makeObjects->from($input);
+    public function from(
+        array $input,
+        MapsObjectsByIdentity $map = null
+    ): ContainsResultingObjects {
+        $map = $map ?: IdentityMap::startEmpty();
+        $objects = $this->makeObjects->from($input, $map);
         $this->relationships->wire($objects, $input);
         return $objects;
     }

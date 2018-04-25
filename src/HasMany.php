@@ -41,7 +41,7 @@ final class HasMany implements MakesConnections
         KnowsWhereToLook $from,
         array $data,
         KnowsWhereToLook $to,
-        array $objects
+        ContainsResultingObjects $objects
     ): array {
         $related = [];
         foreach ($data as $row) {

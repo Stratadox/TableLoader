@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Stratadox\TableLoader;
 
 use Stratadox\ImmutableCollection\ImmutableCollection;
+use Stratadox\TableLoader\ContainsResultingObjects as Result;
 
 /**
  * Wires relationships together.
@@ -42,7 +43,7 @@ final class Wired extends ImmutableCollection implements WiresObjects
     }
 
     /** @inheritdoc */
-    public function wire(array $objects, array $usingTheData): void
+    public function wire(Result $objects, array $usingTheData): void
     {
         foreach ($this as $relation) {
             $relation->wire($objects, $usingTheData);

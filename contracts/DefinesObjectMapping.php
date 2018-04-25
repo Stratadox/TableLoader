@@ -3,6 +3,7 @@
 namespace Stratadox\TableLoader;
 
 use Stratadox\HydrationMapper\InstructsHowToMap;
+use Stratadox\HydrationMapper\RepresentsChoice;
 
 /**
  * Defines how to map an object.
@@ -23,7 +24,7 @@ interface DefinesObjectMapping
     /**
      * Defines what kind of object to map to.
      *
-     * @param string $class                   The class to map to.
+     * @param string              $class      The class to map to.
      * @param InstructsHowToMap[] $properties The mappings for the properties as
      *                                        [property => mappingInstruction]
      * @return self|static                    The object mapping definition.
@@ -48,8 +49,8 @@ interface DefinesObjectMapping
     /**
      * Defines a has-many relationship.
      *
-     * @param string $property             The property for this relationship.
-     * @param string $label                The label of the related entities.
+     * @param string      $property        The property for this relationship.
+     * @param string      $label           The label of the related entities.
      * @param string|null $collectionClass The class to contain the collection,
      *                                     or null for an array container.
      * @return self|static                 The object mapping definition.

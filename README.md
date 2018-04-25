@@ -190,7 +190,6 @@ assert(count($course['#Toolset maintenance']->subscribedStudents()) === 1);
 
 ## To do
 
-- Integrate with identity map!!
 - Self-referring join support.
 - Deal with (/ignore) nulls.
 - Three-way join support.

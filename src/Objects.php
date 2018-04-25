@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
-use Stratadox\Hydrator\CannotHydrate;
 use Stratadox\Hydrator\Hydrates;
+use Stratadox\IdentityMap\MapsObjectsByIdentity;
+use Throwable;
 
 /**
  * Makes partially hydrated objects from an input array.
@@ -46,21 +47,28 @@ final class Objects implements MakesObjects
     }
 
     /** @inheritdoc */
-    public function from(array $input): array
-    {
+    public function from(
+        array $input,
+        MapsObjectsByIdentity $map
+    ): ContainsResultingObjects {
         $data = $this->relevantData->only($input);
         $label = $this->relevantData->label();
         $objects = [];
         foreach ($data as $row) {
-            $id = $this->identifier->forLoading($row);
-            if (!isset($objects[$id])) {
+            $hash = $this->identifier->forLoading($row);
+            if (!isset($objects[$hash])) {
                 try {
-                    $objects[$id] = $this->hydrate->fromArray($row);
-                } catch (CannotHydrate $exception) {
+                    $class = $this->hydrate->classFor($row);
+                    $id = $this->identifier->forIdentityMap($row);
+                    if (!$map->has($class, $id)) {
+                        $map = $map->add($id, $this->hydrate->fromArray($row));
+                    }
+                    $objects[$hash] = $map->get($class, $id);
+                } catch (Throwable $exception) {
                     throw UnmappableRow::encountered($exception, $label, $row);
                 }
             }
         }
-        return [$label => $objects];
+        return Result::fromArray([$label => $objects], $map);
     }
 }

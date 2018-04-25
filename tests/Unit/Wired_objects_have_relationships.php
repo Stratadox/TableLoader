@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace Stratadox\TableLoader\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\TableLoader\From;
 use Stratadox\TableLoader\HasMany;
 use Stratadox\TableLoader\HasOne;
 use Stratadox\TableLoader\Identified;
+use Stratadox\TableLoader\Result;
 use Stratadox\TableLoader\Test\Unit\Fixture\Group;
 use Stratadox\TableLoader\Test\Unit\Fixture\Member;
 use Stratadox\TableLoader\To;
@@ -69,7 +71,7 @@ class Wired_objects_have_relationships extends TestCase
                 'member_name' => 'Chuck Norris'
             ],
         ];
-        $objects = [
+        $objects = Result::fromArray([
             'member' => [
                 '#john' => $john,
                 '#foo' => $foo,
@@ -80,7 +82,7 @@ class Wired_objects_have_relationships extends TestCase
                 '#1' => $default,
                 '#2' => $vip,
             ],
-        ];
+        ]);
 
         $relationships->wire($objects, $data);
 
