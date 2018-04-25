@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace Stratadox\TableLoader\Test\Feature\PreExistingEntities;
 
 use PHPUnit\Framework\TestCase;
-use Stratadox\IdentityMap\IdentityMap;
+use Stratadox\Hydration\Mapper\Instruction\Has;
+use Stratadox\Hydration\Mapper\Instruction\Is;
 use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
 use Stratadox\TableLoader\LoadsTable;
@@ -23,18 +24,33 @@ class Boxes_filled_with_Things extends TestCase
     /** @test */
     function loading_boxes_with_their_things_using_previously_loaded_entities()
     {
-        $foo = new Thing('Foo', new BoxProxy);
-        $bar = new Thing('Bar', new BoxProxy);
-        $identityMap = IdentityMap::with(['Foo' => $foo]);
+        /** @var LoadsTable $make */
+        $make = Joined::table(
+            Load::each('thing')
+                ->by('name')
+                ->as(Thing::class, [
+                    'name' => Is::string(),
+                    'box' => Has::one(BoxProxy::class)
+                ])
+        )();
 
         $table = $this->table([
             //--------+--------------+,
             [ 'box_id', 'thing_name' ],
             //--------+--------------+,
             [  1      , 'Foo'        ],
-            [  1      , 'Bar'        ],
             //--------+--------------+,
         ]);
+
+        $previousResult = $make->from($table);
+
+        /** @var Thing $foo */
+        $foo = $previousResult['thing']['Foo'];
+        $this->assertInstanceOf(
+            BoxProxy::class,
+            $foo->box(),
+            'The box should be a proxy for now: we did not load all Things yet.'
+        );
 
         /** @var LoadsTable $make */
         $make = Joined::table(
@@ -48,7 +64,16 @@ class Boxes_filled_with_Things extends TestCase
                 ->havingOne('box', 'box')
         )();
 
-        $result = $make->from($table, $identityMap);
+        $table = $this->table([
+            //--------+--------------+,
+            [ 'box_id', 'thing_name' ],
+            //--------+--------------+,
+            [  1      , 'Foo'        ],
+            [  1      , 'Bar'        ],
+            //--------+--------------+,
+        ]);
+
+        $result = $make->from($table, $previousResult->identityMap());
         $identityMap = $result->identityMap();
 
         $this->assertSame(
@@ -56,19 +81,16 @@ class Boxes_filled_with_Things extends TestCase
             $result['thing']['Foo'],
             'Foo should be reused because it was in the identity map.'
         );
-        $this->assertNotSame(
-            $bar,
-            $result['thing']['Bar'],
-            'Bar should not be reused because it was not in the identity map.'
-        );
         $this->assertNotInstanceOf(
             BoxProxy::class,
             $foo->box(),
-            'The box relation of Foo should be updated.'
+            'The box should not be a proxy anymore, now that the real one is loaded.'
         );
+
         $this->assertTrue(
             $identityMap->has(Thing::class, 'Bar'),
-            'Bar should now be in the identity map.'
+            'Bar should now be in the identity map as well.'
         );
+        $this->assertCount(2, $result['box'][1], 'Expecting two things in the box.');
     }
 }
