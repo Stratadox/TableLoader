@@ -62,12 +62,12 @@ class Students_own_Books extends TestCase
         $this->assertCount(2, $students);
         $this->assertCount(3, $books);
 
-        $alice = $students['#Alice:of Wonderland'];
-        $bob = $students['#Bob:the Builder'];
+        $alice = $students['Alice:of Wonderland'];
+        $bob = $students['Bob:the Builder'];
 
-        $catchingRabbits = $books['#Catching rabbits'];
-        $hacking101 = $books['#Hacking 101'];
-        $toolsetMaintenance = $books['#Toolset maintenance'];
+        $catchingRabbits = $books['Catching rabbits'];
+        $hacking101 = $books['Hacking 101'];
+        $toolsetMaintenance = $books['Toolset maintenance'];
 
         $this->assertEquals('Alice of Wonderland', $alice->name());
         $this->assertEquals('Bob the Builder', $bob->name());

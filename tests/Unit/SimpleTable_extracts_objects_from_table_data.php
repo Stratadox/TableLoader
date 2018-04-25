@@ -35,8 +35,8 @@ class SimpleTable_extracts_objects_from_table_data extends TestCase
 
         $things = $makeObjects->from($data)['thing'];
 
-        $this->assertEquals(new Thing(1, 'foo'), $things['#1']);
-        $this->assertEquals(new Thing(2, 'bar'), $things['#2']);
+        $this->assertEquals(new Thing(1, 'foo'), $things['1']);
+        $this->assertEquals(new Thing(2, 'bar'), $things['2']);
     }
 
     /** @test */
@@ -44,7 +44,7 @@ class SimpleTable_extracts_objects_from_table_data extends TestCase
     {
         $foo = new Thing(1, 'foo');
         $bar = new Thing(2, 'bar');
-        $identityMap = IdentityMap::with(['#1' => $foo]);
+        $identityMap = IdentityMap::with(['1' => $foo]);
         $makeObjects = SimpleTable::converter(
             'thing',
             SimpleHydrator::forThe(Thing::class),
@@ -58,8 +58,8 @@ class SimpleTable_extracts_objects_from_table_data extends TestCase
 
         $things = $makeObjects->from($data, $identityMap)['thing'];
 
-        $this->assertSame($foo, $things['#1']);
-        $this->assertNotSame($bar, $things['#2']);
+        $this->assertSame($foo, $things['1']);
+        $this->assertNotSame($bar, $things['2']);
     }
 
     /** @test */

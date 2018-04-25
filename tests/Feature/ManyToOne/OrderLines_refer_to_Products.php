@@ -55,18 +55,18 @@ class OrderLines_refer_to_Products extends TestCase
         /** @var OrderLine[] $orderLines */
         $orderLines = $make->from($data)['line'];
 
-        $this->assertSame(120, $orderLines['#1']->totalPrice());
-        $this->assertSame(360, $orderLines['#2']->totalPrice());
-        $this->assertSame(200, $orderLines['#3']->totalPrice());
-        $this->assertSame(540, $orderLines['#4']->totalPrice());
-        $this->assertSame(270, $orderLines['#5']->totalPrice());
+        $this->assertSame(120, $orderLines['1']->totalPrice());
+        $this->assertSame(360, $orderLines['2']->totalPrice());
+        $this->assertSame(200, $orderLines['3']->totalPrice());
+        $this->assertSame(540, $orderLines['4']->totalPrice());
+        $this->assertSame(270, $orderLines['5']->totalPrice());
 
-        $this->assertSame($orderLines['#1']->product(), $orderLines['#2']->product());
-        $this->assertNotSame($orderLines['#2']->product(), $orderLines['#3']->product());
-        $this->assertSame($orderLines['#4']->product(), $orderLines['#5']->product());
+        $this->assertSame($orderLines['1']->product(), $orderLines['2']->product());
+        $this->assertNotSame($orderLines['2']->product(), $orderLines['3']->product());
+        $this->assertSame($orderLines['4']->product(), $orderLines['5']->product());
 
-        $this->assertSame('Foo', (string) $orderLines['#1']->product());
-        $this->assertSame('Bar', (string) $orderLines['#3']->product());
-        $this->assertSame('Qux', (string) $orderLines['#5']->product());
+        $this->assertSame('Foo', (string) $orderLines['1']->product());
+        $this->assertSame('Bar', (string) $orderLines['3']->product());
+        $this->assertSame('Qux', (string) $orderLines['5']->product());
     }
 }

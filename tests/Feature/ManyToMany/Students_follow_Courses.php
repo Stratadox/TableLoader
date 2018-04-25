@@ -54,16 +54,16 @@ class Students_follow_Courses extends TestCase
         /** @var iterable|Course[] $course */
         $course = $objects['course'];
 
-        $this->assertTrue($student['#Alice']->follows($course['#Catching rabbits']));
-        $this->assertTrue($student['#Alice']->follows($course['#Hacking 101']));
-        $this->assertFalse($student['#Alice']->follows($course['#Toolset maintenance']));
+        $this->assertTrue($student['Alice']->follows($course['Catching rabbits']));
+        $this->assertTrue($student['Alice']->follows($course['Hacking 101']));
+        $this->assertFalse($student['Alice']->follows($course['Toolset maintenance']));
 
-        $this->assertFalse($student['#Bob']->follows($course['#Catching rabbits']));
-        $this->assertTrue($student['#Bob']->follows($course['#Hacking 101']));
-        $this->assertTrue($student['#Bob']->follows($course['#Toolset maintenance']));
+        $this->assertFalse($student['Bob']->follows($course['Catching rabbits']));
+        $this->assertTrue($student['Bob']->follows($course['Hacking 101']));
+        $this->assertTrue($student['Bob']->follows($course['Toolset maintenance']));
 
-        $this->assertCount(1, $course['#Catching rabbits']->subscribedStudents());
-        $this->assertCount(2, $course['#Hacking 101']->subscribedStudents());
-        $this->assertCount(1, $course['#Toolset maintenance']->subscribedStudents());
+        $this->assertCount(1, $course['Catching rabbits']->subscribedStudents());
+        $this->assertCount(2, $course['Hacking 101']->subscribedStudents());
+        $this->assertCount(1, $course['Toolset maintenance']->subscribedStudents());
     }
 }

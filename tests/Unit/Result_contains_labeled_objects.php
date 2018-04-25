@@ -20,14 +20,14 @@ class Result_contains_labeled_objects extends TestCase
         $thing = new Thing(1, 'Foo!');
         $result = Result::fromArray([
             'thing' => [
-                '#1' => $thing,
+                '1' => $thing,
             ]
         ], IdentityMap::with([
-            '#1' => $thing
+            '1' => $thing
         ]));
 
         $this->assertArrayHasKey('thing', $result);
-        $this->assertSame($thing, $result['thing']['#1']);
+        $this->assertSame($thing, $result['thing']['1']);
     }
 
     /** @test */
@@ -45,14 +45,14 @@ class Result_contains_labeled_objects extends TestCase
         $thing = new Thing(1, 'Foo!');
         $result = Result::fromArray([
             'thing' => [
-                '#1' => $thing,
+                '1' => $thing,
             ]
         ], IdentityMap::with([
-            '#1' => $thing
+            '1' => $thing
         ]));
 
-        $this->assertTrue($result->has(Thing::class, '#1'));
-        $this->assertFalse($result->has(Thing::class, '#2'));
+        $this->assertTrue($result->has(Thing::class, '1'));
+        $this->assertFalse($result->has(Thing::class, '2'));
     }
 
     /** @test */
@@ -60,10 +60,10 @@ class Result_contains_labeled_objects extends TestCase
     {
         $foo = new Thing(1, 'Foo!');
         $result = Result::fromArray([])
-            ->add('thing', '#thing:1', '#1', $foo);
+            ->add('thing', 'thing:1', '1', $foo);
 
-        $this->assertTrue($result->has(Thing::class, '#1'));
-        $this->assertSame($foo, $result['thing']['#thing:1']);
+        $this->assertTrue($result->has(Thing::class, '1'));
+        $this->assertSame($foo, $result['thing']['thing:1']);
     }
 
     /** @test */
@@ -72,15 +72,15 @@ class Result_contains_labeled_objects extends TestCase
         $foo = new Thing(1, 'Foo!');
         $result = Result::fromArray([
             'thing' => [
-                '#thing:1' => $foo,
+                'thing:1' => $foo,
             ]
         ], IdentityMap::with([
-            '#1' => $foo
+            '1' => $foo
         ]));
-        $result = $result->add('thing', '#thing:2', '#2',  new Thing(2, 'Bar!'));
+        $result = $result->add('thing', 'thing:2', '2',  new Thing(2, 'Bar!'));
 
-        $this->assertTrue($result->has(Thing::class, '#1'));
-        $this->assertSame($foo, $result['thing']['#thing:1']);
+        $this->assertTrue($result->has(Thing::class, '1'));
+        $this->assertSame($foo, $result['thing']['thing:1']);
     }
 
     /** @test */
@@ -89,46 +89,46 @@ class Result_contains_labeled_objects extends TestCase
         $foo = new Thing(1, 'Foo!');
         $firstResult = Result::fromArray([
             'thing' => [
-                '#thing:1' => $foo,
+                'thing:1' => $foo,
             ]
         ], IdentityMap::with([
-            '#1' => $foo
+            '1' => $foo
         ]));
         $bar = new Thing(2, 'Bar!');
         $secondResult = Result::fromArray([
             'thing' => [
-                '#thing:2' => $bar,
+                'thing:2' => $bar,
             ]
         ], IdentityMap::with([
-            '#1' => $foo,
-            '#2' => $bar
+            '1' => $foo,
+            '2' => $bar
         ]));
 
         $finalResult = $firstResult->mergeWith($secondResult);
 
-        $this->assertTrue($finalResult->has(Thing::class, '#1'));
-        $this->assertTrue($finalResult->has(Thing::class, '#2'));
-        $this->assertSame($foo, $finalResult['thing']['#thing:1']);
-        $this->assertSame($bar, $finalResult['thing']['#thing:2']);
+        $this->assertTrue($finalResult->has(Thing::class, '1'));
+        $this->assertTrue($finalResult->has(Thing::class, '2'));
+        $this->assertSame($foo, $finalResult['thing']['thing:1']);
+        $this->assertSame($bar, $finalResult['thing']['thing:2']);
     }
 
     /** @test */
     function including_previously_loaded_objects_in_the_result()
     {
         $foo = new Thing(1, 'Foo!');
-        $result = Result::fromArray([], IdentityMap::with(['#1' => $foo]))
-            ->include('thing', '#1', $foo);
+        $result = Result::fromArray([], IdentityMap::with(['1' => $foo]))
+            ->include('thing', '1', $foo);
 
-        $this->assertSame($foo, $result['thing']['#1']);
+        $this->assertSame($foo, $result['thing']['1']);
     }
 
     /** @test */
     function getting_previously_loaded_objects_from_the_result()
     {
         $foo = new Thing(1, 'Foo!');
-        $result = Result::fromArray([], IdentityMap::with(['#1' => $foo]));
+        $result = Result::fromArray([], IdentityMap::with(['1' => $foo]));
 
-        $this->assertSame($foo, $result->get(Thing::class, '#1'));
+        $this->assertSame($foo, $result->get(Thing::class, '1'));
     }
 
     /** @test */
@@ -148,10 +148,10 @@ class Result_contains_labeled_objects extends TestCase
         $thing = new Thing(1, 'Foo!');
         $result = Result::fromArray([
             'thing' => [
-                '#1' => $thing,
+                '1' => $thing,
             ]
         ], IdentityMap::with([
-            '#1' => $thing
+            '1' => $thing
         ]));
 
         $this->expectException(BadMethodCallException::class);

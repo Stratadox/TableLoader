@@ -35,10 +35,10 @@ class Wire_a_relationship_together extends TestCase
         $bar1 = new Bar('bar1');
         $bar2 = new Bar('bar2');
         $objects = Result::fromArray([
-            'foo' => ['#foo1' => $foo],
+            'foo' => ['foo1' => $foo],
             'bar' => [
-                '#bar1' => $bar1,
-                '#bar2' => $bar2,
+                'bar1' => $bar1,
+                'bar2' => $bar2,
             ],
         ]);
 

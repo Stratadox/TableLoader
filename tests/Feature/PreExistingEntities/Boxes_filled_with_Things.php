@@ -25,7 +25,7 @@ class Boxes_filled_with_Things extends TestCase
     {
         $foo = new Thing('Foo', new BoxProxy);
         $bar = new Thing('Bar', new BoxProxy);
-        $identityMap = IdentityMap::with(['#Foo' => $foo]);
+        $identityMap = IdentityMap::with(['Foo' => $foo]);
 
         $table = $this->table([
             //--------+--------------+,
@@ -53,12 +53,12 @@ class Boxes_filled_with_Things extends TestCase
 
         $this->assertSame(
             $foo,
-            $result['thing']['#Foo'],
+            $result['thing']['Foo'],
             'Foo should be reused because it was in the identity map.'
         );
         $this->assertNotSame(
             $bar,
-            $result['thing']['#Bar'],
+            $result['thing']['Bar'],
             'Bar should not be reused because it was not in the identity map.'
         );
         $this->assertNotInstanceOf(
@@ -67,7 +67,7 @@ class Boxes_filled_with_Things extends TestCase
             'The box relation of Foo should be updated.'
         );
         $this->assertTrue(
-            $identityMap->has(Thing::class, '#Bar'),
+            $identityMap->has(Thing::class, 'Bar'),
             'Bar should now be in the identity map.'
         );
     }

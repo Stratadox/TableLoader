@@ -77,9 +77,9 @@ class JoinedTable_extracts_connected_objects_from_a_joined_result extends TestCa
             $this->assertInstanceOf(Foo::class, $foo, 'Expecting Foo objects.');
         }
 
-        $this->assertCount(2, $foos['#Foo 1']->bars(), 'Expecting Foo 1 to have two Bars.');
-        $this->assertCount(1, $foos['#Foo 2']->bars(), 'Expecting Foo 2 to have one Bar.');
-        $this->assertCount(3, $foos['#Foo 3']->bars(), 'Expecting Foo 3 to have three Bars.');
+        $this->assertCount(2, $foos['Foo 1']->bars(), 'Expecting Foo 1 to have two Bars.');
+        $this->assertCount(1, $foos['Foo 2']->bars(), 'Expecting Foo 2 to have one Bar.');
+        $this->assertCount(3, $foos['Foo 3']->bars(), 'Expecting Foo 3 to have three Bars.');
 
         foreach ($foos as $foo) {
             foreach ($foo->bars() as $bar) {
@@ -88,8 +88,8 @@ class JoinedTable_extracts_connected_objects_from_a_joined_result extends TestCa
         }
 
         $this->assertSame(
-            $foos['#Foo 1']->bars()[1],
-            $foos['#Foo 2']->bars()[0],
+            $foos['Foo 1']->bars()[1],
+            $foos['Foo 2']->bars()[0],
             'Expecting Foo 1 and Foo 2 to share a Bar instance.'
         );
 
@@ -101,10 +101,10 @@ class JoinedTable_extracts_connected_objects_from_a_joined_result extends TestCa
             $this->assertInstanceOf(Bar::class, $bar, 'Expecting Bar objects.');
         }
 
-        $this->assertCount(1, $bars['#Bar 1']->foos(), 'Expecting Bar 1 to have one Foo.');
-        $this->assertCount(3, $bars['#Bar 2']->foos(), 'Expecting Bar 2 to have three Foos.');
-        $this->assertCount(1, $bars['#Bar 3']->foos(), 'Expecting Bar 3 to have one Foo.');
-        $this->assertCount(1, $bars['#Bar 4']->foos(), 'Expecting Bar 4 to have one Foo.');
+        $this->assertCount(1, $bars['Bar 1']->foos(), 'Expecting Bar 1 to have one Foo.');
+        $this->assertCount(3, $bars['Bar 2']->foos(), 'Expecting Bar 2 to have three Foos.');
+        $this->assertCount(1, $bars['Bar 3']->foos(), 'Expecting Bar 3 to have one Foo.');
+        $this->assertCount(1, $bars['Bar 4']->foos(), 'Expecting Bar 4 to have one Foo.');
     }
 
     /** @test */
@@ -150,7 +150,7 @@ class JoinedTable_extracts_connected_objects_from_a_joined_result extends TestCa
                 new Thing(2, 'Bar'),
                 new Thing(3, 'Baz')
             )),
-            $baskets['#foobar']
+            $baskets['foobar']
         );
 
         $this->assertEquals(
@@ -160,7 +160,7 @@ class JoinedTable_extracts_connected_objects_from_a_joined_result extends TestCa
                 new Thing(6, 'C'),
                 new Thing(7, 'D')
             )),
-            $baskets['#letters']
+            $baskets['letters']
         );
     }
 
@@ -170,7 +170,7 @@ class JoinedTable_extracts_connected_objects_from_a_joined_result extends TestCa
         $existingBasket = new Basket('foobar', new Things);
 
         $identityMap = IdentityMap::with([
-            '#foobar' => $existingBasket,
+            'foobar' => $existingBasket,
         ]);
 
         $makeObjects = JoinedTable::converter(
@@ -203,7 +203,7 @@ class JoinedTable_extracts_connected_objects_from_a_joined_result extends TestCa
 
         $baskets = $makeObjects->from($tableData, $identityMap)['basket'];
 
-        $this->assertSame($existingBasket, $baskets['#foobar']);
+        $this->assertSame($existingBasket, $baskets['foobar']);
         $this->assertCount(3, $existingBasket->things());
     }
 }

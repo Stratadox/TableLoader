@@ -44,13 +44,13 @@ class Objects_get_extracted_from_the_input_data extends TestCase
 
         $this->assertCount(3, $things);
 
-        $this->assertSame('Foo', $things['#1']->name());
-        $this->assertSame('Bar', $things['#2']->name());
-        $this->assertSame('Baz', $things['#3']->name());
+        $this->assertSame('Foo', $things['1']->name());
+        $this->assertSame('Bar', $things['2']->name());
+        $this->assertSame('Baz', $things['3']->name());
 
-        $this->assertSame(1, $things['#1']->id());
-        $this->assertSame(2, $things['#2']->id());
-        $this->assertSame(3, $things['#3']->id());
+        $this->assertSame(1, $things['1']->id());
+        $this->assertSame(2, $things['2']->id());
+        $this->assertSame(3, $things['3']->id());
     }
 
     /** @test */
@@ -72,7 +72,7 @@ class Objects_get_extracted_from_the_input_data extends TestCase
         );
 
         $identityMap = IdentityMap::with([
-            '#1' => $foo
+            '1' => $foo
         ]);
 
         $resulting = $objects->from($tableData, $identityMap);
@@ -82,10 +82,10 @@ class Objects_get_extracted_from_the_input_data extends TestCase
         /** @var iterable|Thing[] $things */
         $things = $resulting['thing'];
 
-        $this->assertSame($foo, $things['#1']);
+        $this->assertSame($foo, $things['1']);
 
-        $this->assertEquals($bar, $things['#2']);
-        $this->assertNotSame($bar, $things['#2']);
+        $this->assertEquals($bar, $things['2']);
+        $this->assertNotSame($bar, $things['2']);
     }
 
     /** @test */
