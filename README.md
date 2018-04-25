@@ -1,4 +1,4 @@
- Table Loader
+# Table Loader
 
 [![Build Status](https://travis-ci.org/Stratadox/TableLoader.svg?branch=master)](https://travis-ci.org/Stratadox/TableLoader)
 [![Coverage Status](https://coveralls.io/repos/github/Stratadox/TableLoader/badge.svg?branch=master)](https://coveralls.io/github/Stratadox/TableLoader?branch=master)
