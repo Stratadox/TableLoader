@@ -22,7 +22,9 @@ Enables eager loading from joined table results.
 Closely works together with the [Hydration](https://github.com/Stratadox/Hydrate) modules
 to easily integrate with mapped hydration and lazy- and extra lazy loading.
 
-## Usage
+Prevents loading already-loaded entities by checking the [Identity Map](https://github.com/Stratadox/IdentityMap).
+
+## Usage Samples
 
 ### Simple result without (eager) relations:
 
