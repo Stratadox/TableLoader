@@ -35,7 +35,7 @@ interface ContainsResultingObjects extends ArrayAccess, IteratorAggregate
      * @return object       The object that was stored in the map.
      * @throws NoSuchObject
      */
-    public function get(string $class, string $id);
+    public function get(string $class, string $id): object;
 
     /**
      * Adds the object to the result.
@@ -51,7 +51,7 @@ interface ContainsResultingObjects extends ArrayAccess, IteratorAggregate
         string $label,
         string $idForLoading,
         string $idForMap,
-        $object
+        object $object
     ): Result;
 
     /**
@@ -65,7 +65,7 @@ interface ContainsResultingObjects extends ArrayAccess, IteratorAggregate
     public function include(
         string $label,
         string $id,
-        $object
+        object $object
     ): Result;
 
     /**

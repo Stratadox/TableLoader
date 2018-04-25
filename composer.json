@@ -18,7 +18,7 @@
         }
     },
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "stratadox/instantiator": "^0.1.0",
         "stratadox/immutable-collection": "^1.1",
         "stratadox/hydration-mapper": "^2.2",

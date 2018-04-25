@@ -47,7 +47,7 @@ final class Result implements ContainsResultingObjects
     }
 
     /** @inheritdoc */
-    public function get(string $class, string $id)
+    public function get(string $class, string $id): object
     {
         return $this->identityMap->get($class, $id);
     }
@@ -57,7 +57,7 @@ final class Result implements ContainsResultingObjects
         string $label,
         string $idForLoading,
         string $idForMap,
-        $object
+        object $object
     ): ContainsResultingObjects {
         return new self($this->merge(
             $this->objects,
@@ -79,7 +79,7 @@ final class Result implements ContainsResultingObjects
     public function include(
         string $label,
         string $id,
-        $object
+        object $object
     ): ContainsResultingObjects {
         return new self($this->merge(
             $this->objects,
