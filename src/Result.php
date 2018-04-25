@@ -99,7 +99,7 @@ final class Result implements ContainsResultingObjects
                 $result[$label][$id] = $object;
             }
         }
-        return $result;
+        return (array) $result;
     }
 
     /** @inheritdoc */
