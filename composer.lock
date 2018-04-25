@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "618914e41d71d13a521e5bf04ac88349",
+    "content-hash": "7671b32220f744038ac987e1e91acfdb",
     "packages": [
         {
             "name": "stratadox/collection-contracts",
@@ -292,16 +292,16 @@
         },
         {
             "name": "stratadox/identity-map",
-            "version": "v0.1",
+            "version": "v0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Stratadox/IdentityMap.git",
-                "reference": "f31dbb83860d093468091325405ed19a50527b65"
+                "reference": "361c1cf50757ee9a4eb20361ca278660a61524eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Stratadox/IdentityMap/zipball/f31dbb83860d093468091325405ed19a50527b65",
-                "reference": "f31dbb83860d093468091325405ed19a50527b65",
+                "url": "https://api.github.com/repos/Stratadox/IdentityMap/zipball/361c1cf50757ee9a4eb20361ca278660a61524eb",
+                "reference": "361c1cf50757ee9a4eb20361ca278660a61524eb",
                 "shasum": ""
             },
             "require": {
@@ -331,7 +331,7 @@
                     "homepage": "http://www.stratadox.com/"
                 }
             ],
-            "time": "2018-04-24T18:08:06+00:00"
+            "time": "2018-04-25T20:32:31+00:00"
         },
         {
             "name": "stratadox/immutable-collection",
