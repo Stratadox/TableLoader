@@ -54,8 +54,8 @@ final class Identified implements IdentifiesEntities
     public function forLoading(array $row): string
     {
         return $this->identifierFor($row, array_merge(
-            $this->identifyingColumns,
-            $this->columnsForLoading
+            $this->columnsForLoading,
+            $this->identifyingColumns
         ));
     }
 
