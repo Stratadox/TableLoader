@@ -35,4 +35,12 @@ class From_one_entity_to_another extends TestCase
         $this->assertTrue($from->hereToo(new Foo('foo')));
         $this->assertFalse($from->hereToo(new Bar('not actually foo')));
     }
+
+    /** @test */
+    function accepting_all_concrete_classes_if_no_restrictions_apply()
+    {
+        $from = From::the('foo', Identified::by('name'));
+        $this->assertTrue($from->hereToo(new Foo('foo')));
+        $this->assertTrue($from->hereToo(new Bar('not actually foo')));
+    }
 }
