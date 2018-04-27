@@ -43,6 +43,7 @@ final class HasMany implements MakesConnections
         KnowsWhereToLook $to,
         ContainsResultingObjects $objects
     ): array {
+        // @todo add caching?
         $related = [];
         foreach ($data as $row) {
             // @todo skip if already there?

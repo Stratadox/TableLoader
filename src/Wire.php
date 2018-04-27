@@ -18,7 +18,7 @@ final class Wire implements WiresObjects
     private $setter;
 
     private function __construct(
-        KnowsWhereToLook $from,
+        KnowsWhereToLookFrom $from,
         KnowsWhereToLook $to,
         MakesConnections $relation
     ) {
@@ -33,13 +33,13 @@ final class Wire implements WiresObjects
     /**
      * Makes a new object that wires a relationship together.
      *
-     * @param KnowsWhereToLook $from     Identification for the source entity.
-     * @param KnowsWhereToLook $to       Identification for the target entity.
-     * @param MakesConnections $relation The type of relationship.
-     * @return Wire                      The wiring object.
+     * @param KnowsWhereToLookFrom $from     Identification for the source entity.
+     * @param KnowsWhereToLook     $to       Identification for the target entity.
+     * @param MakesConnections     $relation The type of relationship.
+     * @return Wire                          The wiring object.
      */
     public static function it(
-        KnowsWhereToLook $from,
+        KnowsWhereToLookFrom $from,
         KnowsWhereToLook $to,
         MakesConnections $relation
     ): self {
@@ -66,7 +66,9 @@ final class Wire implements WiresObjects
         array $relations
     ): void {
         foreach ($relations as $id => $relation) {
-            $this->setter->call($objects[$id], $property, $relation);
+            if ($this->from->hereToo($objects[$id])) {
+                $this->setter->call($objects[$id], $property, $relation);
+            }
         }
     }
 }

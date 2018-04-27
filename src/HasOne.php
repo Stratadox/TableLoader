@@ -36,6 +36,7 @@ final class HasOne implements MakesConnections
         KnowsWhereToLook $to,
         ContainsResultingObjects $objects
     ): array {
+        // @todo add caching?
         $relations = [];
         foreach ($data as $relation) {
             $relations[$from->this($relation)] = $objects[$to->label()][$to->this($relation)];
