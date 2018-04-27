@@ -3,20 +3,24 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
+use function is_null;
+
 /**
  * Locates the source object for the relationship.
  *
  * @author Stratadox
  */
-final class From implements KnowsWhereToLook
+final class From implements KnowsWhereToLookFrom
 {
     private $who;
     private $identity;
+    private $class;
 
-    private function __construct(string $who, IdentifiesEntities $identity)
+    private function __construct(string $who, IdentifiesEntities $identity, ?string $class)
     {
         $this->who = $who;
         $this->identity = $identity;
+        $this->class = $class;
     }
 
     /**
@@ -32,7 +36,25 @@ final class From implements KnowsWhereToLook
         string $label,
         IdentifiesEntities $identity
     ): self {
-        return new self($label, $identity);
+        return new self($label, $identity, null);
+    }
+
+    /**
+     * Makes a new source locator for a concrete class.
+     *
+     * @param string             $class    The name of the concrete class.
+     * @param string             $label    The label of the source objects.
+     * @param IdentifiesEntities $identity The mechanism to identify the source
+     *                                     entity of the row.
+     *
+     * @return From
+     */
+    public static function onlyThe(
+        string $class,
+        string $label,
+        IdentifiesEntities $identity
+    ): self {
+        return new self($label, $identity, $class);
     }
 
     /** @inheritdoc */
@@ -45,5 +67,11 @@ final class From implements KnowsWhereToLook
     public function this(array $relationship): string
     {
         return $this->identity->forLoading($relationship);
+    }
+
+    /** @inheritdoc */
+    public function hereToo(object $shouldWeConnectIt): bool
+    {
+        return $shouldWeConnectIt instanceof $this->class;
     }
 }
