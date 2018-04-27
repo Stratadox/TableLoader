@@ -4,14 +4,19 @@ declare(strict_types=1);
 namespace Stratadox\TableLoader\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Stratadox\Hydrator\VariadicConstructor;
 use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\TableLoader\From;
 use Stratadox\TableLoader\HasMany;
 use Stratadox\TableLoader\HasOne;
 use Stratadox\TableLoader\Identified;
 use Stratadox\TableLoader\Result;
+use Stratadox\TableLoader\Test\Unit\Fixture\Child;
 use Stratadox\TableLoader\Test\Unit\Fixture\Group;
 use Stratadox\TableLoader\Test\Unit\Fixture\Member;
+use Stratadox\TableLoader\Test\Unit\Fixture\OtherChild;
+use Stratadox\TableLoader\Test\Unit\Fixture\Thing;
+use Stratadox\TableLoader\Test\Unit\Fixture\Things;
 use Stratadox\TableLoader\To;
 use Stratadox\TableLoader\Wire;
 use Stratadox\TableLoader\Wired;
@@ -93,5 +98,51 @@ class Wired_objects_have_relationships extends TestCase
 
         $this->assertSame([$john, $foo], $default->members());
         $this->assertSame([$jackie, $chuck], $vip->members());
+    }
+
+    /** @test */
+    function wiring_a_one_to_one_or_one_to_many_based_on_the_subclass()
+    {
+        $relationships = Wired::together(
+            Wire::it(
+                From::onlyThe(Child::class, 'kid', Identified::by('kid_name')),
+                To::the('toy', Identified::by('toy_id')),
+                HasOne::in('toy')
+            ),
+            Wire::it(
+                From::onlyThe(OtherChild::class, 'kid', Identified::by('kid_name')),
+                To::the('toy', Identified::by('toy_id')),
+                HasMany::in('toys', VariadicConstructor::forThe(Things::class))
+            )
+        );
+
+        $data = [
+            ['kid_name' => 'Kid 1', 'kid_type' => 'child', 'toy_id' => 1, 'toy_name' => 'Toy 1'],
+            ['kid_name' => 'Kid 2', 'kid_type' => 'other', 'toy_id' => 2, 'toy_name' => 'Toy 2'],
+            ['kid_name' => 'Kid 2', 'kid_type' => 'other', 'toy_id' => 3, 'toy_name' => 'Toy 3'],
+        ];
+        $toy1 = new Thing(1, 'Toy 1');
+        $toy2 = new Thing(2, 'Toy 2');
+        $toy3 = new Thing(3, 'Toy 3');
+        $kid1 = new Child('Kid 1');
+        $kid2 = new OtherChild('Kid 1');
+
+        $objects = Result::fromArray([
+            'kid' => [
+                'Kid 1' => $kid1,
+                'Kid 2' => $kid2,
+            ],
+            'toy' => [
+                '1' => $toy1,
+                '2' => $toy2,
+                '3' => $toy3,
+            ],
+        ]);
+
+        $relationships->wire($objects, $data);
+
+        $this->assertSame($toy1, $kid1->toy());
+        $this->assertSame($toy2, $kid2->toys()[0]);
+        $this->assertSame($toy3, $kid2->toys()[1]);
     }
 }

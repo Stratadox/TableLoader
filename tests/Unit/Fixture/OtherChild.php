@@ -10,10 +10,10 @@ final class OtherChild extends TheParent
     public function __construct(string $name, Thing ...$toys)
     {
         parent::__construct($name);
-        $this->toys = $toys;
+        $this->toys = new Things(...$toys);
     }
 
-    public function toys(): array
+    public function toys(): Things
     {
         return $this->toys;
     }
