@@ -42,7 +42,7 @@ class Identified_records_have_identification_keys extends TestCase
 
         $identifier = Identified::by('id')->andForLoading('type');
 
-        $this->assertSame('12:1', $identifier->forLoading($row));
+        $this->assertSame('1:12', $identifier->forLoading($row));
     }
 
     /** @test */
@@ -65,7 +65,7 @@ class Identified_records_have_identification_keys extends TestCase
             $identifier->forLoading($row),
             $identifier->forIdentityMap($row)
         );
-        $this->assertSame('1:2:A', $identifier->forLoading($row));
+        $this->assertSame('A:1:2', $identifier->forLoading($row));
         $this->assertSame('1:2', $identifier->forIdentityMap($row));
     }
 
