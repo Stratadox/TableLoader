@@ -72,6 +72,6 @@ final class From implements KnowsWhereToLookFrom
     /** @inheritdoc */
     public function hereToo(object $shouldWeConnectIt): bool
     {
-        return $shouldWeConnectIt instanceof $this->class;
+        return is_null($this->class) || $shouldWeConnectIt instanceof $this->class;
     }
 }
