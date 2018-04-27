@@ -24,4 +24,13 @@ final class CannotMakeMapping
             $theirLabel
         ));
     }
+
+    public static function missingTheLabelFor(string $choiceTrigger): self
+    {
+        return new CannotMakeMapping(withMessage(
+            'Cannot make a mapping for the `%s` objects: ' .
+            'The label for the source relation was not provided.',
+            $choiceTrigger
+        ));
+    }
 }
