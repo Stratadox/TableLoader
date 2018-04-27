@@ -6,6 +6,8 @@ namespace Stratadox\TableLoader\Test\Unit;
 use PHPUnit\Framework\TestCase;
 use Stratadox\TableLoader\Identified;
 use Stratadox\TableLoader\From;
+use Stratadox\TableLoader\Test\Unit\Fixture\Bar;
+use Stratadox\TableLoader\Test\Unit\Fixture\Foo;
 
 /**
  * @covers \Stratadox\TableLoader\From
@@ -24,5 +26,13 @@ class From_one_entity_to_another extends TestCase
     {
         $from = From::the('foo', Identified::by('name'));
         $this->assertSame('A', $from->this(['name' => 'A']));
+    }
+
+    /** @test */
+    function knowing_which_concrete_class_gets_this_relation()
+    {
+        $from = From::onlyThe(Foo::class, 'foo', Identified::by('name'));
+        $this->assertTrue($from->hereToo(new Foo('foo')));
+        $this->assertFalse($from->hereToo(new Bar('not actually foo')));
     }
 }
