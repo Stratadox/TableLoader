@@ -192,7 +192,6 @@ assert(count($course['Toolset maintenance']->subscribedStudents()) === 1);
 
 ## To do
 
-- Self-referring join support.
 - Deal with (/ignore) nulls.
 - Three-way join support.
 - Hydrator injection in joined table builder.
