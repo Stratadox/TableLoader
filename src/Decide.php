@@ -17,7 +17,7 @@ use Stratadox\Instantiator\CannotInstantiateThis;
 final class Decide implements DefinesMultipleClassMapping
 {
     private $label;
-    private $ownId = [];
+    private $ownId;
     private $identityColumnsFor;
     private $decisionKey;
     /** @var LoadsWhenTriggered[] */
@@ -119,6 +119,7 @@ final class Decide implements DefinesMultipleClassMapping
     public function objects(): MakesObjects
     {
         assert(isset($this->decisionKey));
+        // @todo try/catch
         return Objects::producedByThis(
             $this->hydrator(),
             Prefixed::with($this->label),
@@ -129,35 +130,17 @@ final class Decide implements DefinesMultipleClassMapping
     /** @inheritdoc */
     public function wiring(): WiresObjects
     {
-        // @todo extract methods
-        $ownLabel = $this->label;
-        $ownId = $this->identityColumnsFor[$ownLabel];
-        $wires = [];
-        foreach ($this->relation as $otherLabel => $connectThem) {
-            //@todo $this->mustKnowTheIdentityColumnsFor($otherLabel);
-            $otherId = $this->identityColumnsFor[$otherLabel];
-            $wires[] = Wire::it(
-                From::the($ownLabel, Identified::by(...$ownId)),
-                To::the($otherLabel, Identified::by(...$otherId)),
-                $connectThem
-            );
-        }
-        /** @var LoadsWhenTriggered[] $choices */
-        $choices = [];
-        foreach ($this->choices as $choice) {
-            foreach ($this->identityColumnsFor as $label => $columns) {
-                $choice = $choice->identifying($label, ...$columns);
-            }
-            $choices[] = $choice->labeled($this->label);
-
-        }
-        foreach ($choices as $choice) {
-            $wiring = $choice->wiring();
-            if ($wiring instanceof Countable && count($wiring) === 0) {
-                continue;
-            }
-            $wires[] = $wiring;
-        }
+        $wires = $this->addChoiceWiring(
+            $this->prepareChoices(
+                $this->choices,
+                $this->identityColumnsFor
+            ),
+            $this->ownWiring(
+                $this->label,
+                $this->identityColumnsFor,
+                $this->relation
+            )
+        );
         if (count($wires) === 1) {
             return $wires[0];
         }
@@ -192,5 +175,62 @@ final class Decide implements DefinesMultipleClassMapping
         return array_map(function(string $column) use ($prefix): string {
             return $prefix . $column;
         }, $columns);
+    }
+
+    /**
+     * @param string             $ownLabel
+     * @param string[][]         $identityFor
+     * @param MakesConnections[] $relations
+     * @return WiresObjects[]
+     */
+    private function ownWiring(string $ownLabel, array $identityFor, array $relations): array
+    {
+        $ownId = $identityFor[$ownLabel];
+        $wires = [];
+        foreach ($relations as $otherLabel => $connectThem) {
+            //@todo $this->mustKnowTheIdentityColumnsFor($otherLabel);
+            $otherId = $identityFor[$otherLabel];
+            $wires[] = Wire::it(
+                From::the($ownLabel, Identified::by(...$ownId)),
+                To::the($otherLabel, Identified::by(...$otherId)),
+                $connectThem
+            );
+        }
+        return $wires;
+    }
+
+    /**
+     * @param LoadsWhenTriggered[] $originalChoices
+     * @param string[][]           $identityColumns
+     * @return LoadsWhenTriggered[]
+     */
+    private function prepareChoices(array $originalChoices, array $identityColumns): array
+    {
+        $choices = [];
+        foreach ($originalChoices as $choice) {
+            foreach ($identityColumns as $label => $columns) {
+                $choice = $choice->identifying($label, ...$columns);
+            }
+            $choices[] = $choice->labeled($this->label);
+        }
+        return $choices;
+    }
+
+    /**
+     * @param LoadsWhenTriggered[] $choices
+     * @param WiresObjects[]       $wires
+     * @return WiresObjects[]
+     * @throws CannotMakeTableMapping
+     */
+    private function addChoiceWiring(array $choices, array $wires): array
+    {
+        foreach ($choices as $choice) {
+            $wiring = $choice->wiring();
+            if ($wiring instanceof Countable && !count($wiring)) {
+                continue;
+            }
+            $wires[] = $wiring;
+        }
+        return $wires;
     }
 }
