@@ -252,4 +252,26 @@ class Decide_on_a_subclass_based_on_a_key extends TestCase
             $howToLoad->wiring()
         );
     }
+
+    /** @test */
+    function defining_a_conditional_has_many_object_wiring()
+    {
+        $howToLoad = Decide::which('kid')->basedOn(
+            'type',
+            InCase::of('child')->as(Child::class),
+            InCase::of('other')->as(OtherChild::class)->havingMany('toys', 'toy')
+        )->identifying('toy', 'toy_name');
+
+        $this->assertEquals(
+            Wire::it(
+                From::onlyThe(OtherChild::class, 'kid', Identified::by(
+                    'kid_type',
+                    'kid_id'
+                )),
+                To::the('toy', Identified::by('toy_name')),
+                HasMany::in('toys')
+            ),
+            $howToLoad->wiring()
+        );
+    }
 }
