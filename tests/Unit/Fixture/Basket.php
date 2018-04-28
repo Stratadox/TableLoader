@@ -5,7 +5,7 @@ namespace Stratadox\TableLoader\Test\Unit\Fixture;
 
 use function assert;
 
-final class Basket
+final class Basket implements ContainsThings
 {
     private $name;
     private $things;
