@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
+use Stratadox\Hydrator\CannotHydrate;
 use Stratadox\Hydrator\Hydrates;
-use Stratadox\IdentityMap\MapsObjectsByIdentity;
+use Stratadox\IdentityMap\AlreadyThere;
+use Stratadox\IdentityMap\MapsObjectsByIdentity as Map;
 use Throwable;
 
 /**
@@ -47,28 +49,37 @@ final class Objects implements MakesObjects
     }
 
     /** @inheritdoc */
-    public function from(
-        array $input,
-        MapsObjectsByIdentity $map
-    ): ContainsResultingObjects {
+    public function from(array $input, Map $map): ContainsResultingObjects {
         $data = $this->relevantData->only($input);
         $label = $this->relevantData->label();
         $objects = [];
         foreach ($data as $row) {
             $hash = $this->identifier->forLoading($row);
-            if (!isset($objects[$hash])) {
-                try {
-                    $class = $this->hydrate->classFor($row);
-                    $id = $this->identifier->forIdentityMap($row);
-                    if (!$map->has($class, $id)) {
-                        $map = $map->add($id, $this->hydrate->fromArray($row));
-                    }
-                    $objects[$hash] = $map->get($class, $id);
-                } catch (Throwable $exception) {
-                    throw UnmappableRow::encountered($exception, $label, $row);
-                }
+            if (isset($objects[$hash])) {
+                continue;
+            }
+            try {
+                $class = $this->hydrate->classFor($row);
+                $id = $this->identifier->forIdentityMap($row);
+                $map = $this->addToMapIfNew($class, $id, $row, $map);
+                $objects[$hash] = $map->get($class, $id);
+            } catch (Throwable $exception) {
+                throw UnmappableRow::encountered($exception, $label, $row);
             }
         }
         return Result::fromArray([$label => $objects], $map);
+    }
+
+    /** @throws CannotHydrate|AlreadyThere */
+    private function addToMapIfNew(
+        string $class,
+        string $id,
+        array $row,
+        Map $map
+    ): Map {
+        if (!$map->has($class, $id)) {
+            $map = $map->add($id, $this->hydrate->fromArray($row));
+        }
+        return $map;
     }
 }
