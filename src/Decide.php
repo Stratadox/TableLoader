@@ -14,7 +14,7 @@ use Stratadox\Hydrator\OneOfTheseHydrators;
 use Stratadox\Hydrator\VariadicConstructor;
 use Stratadox\Instantiator\CannotInstantiateThis;
 
-final class Decide implements DefinesJoinedClassMapping
+final class Decide implements DefinesMultipleClassMapping
 {
     private $label;
     private $ownId = [];
@@ -41,7 +41,7 @@ final class Decide implements DefinesJoinedClassMapping
     public function basedOn(
         string $key,
         LoadsWhenTriggered ...$choices
-    ): DefinesJoinedClassMapping {
+    ): DefinesMultipleClassMapping {
         $new = clone $this;
         $new->decisionKey = $key;
         $new->choices = $choices;
@@ -49,7 +49,7 @@ final class Decide implements DefinesJoinedClassMapping
     }
 
     /** @inheritdoc */
-    public function by(string ...$columns): DefinesJoinedClassMapping
+    public function by(string ...$columns): DefinesMultipleClassMapping
     {
         $label = $this->label;
         $new = clone $this;
@@ -84,7 +84,7 @@ final class Decide implements DefinesJoinedClassMapping
     }
 
     /** @inheritdoc */
-    public function with(array $properties): DefinesJoinedClassMapping
+    public function with(array $properties): DefinesMultipleClassMapping
     {
         $new = clone $this;
         foreach ($this->choices as $i => $choice) {
