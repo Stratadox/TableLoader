@@ -30,7 +30,7 @@ final class UnmappableRelationship
         string $property,
         string $owner,
         string $id
-    ): self {
+    ): CannotLoadTable {
         return new UnmappableRelationship(withMessage(
             'Could not map the `%s` in the `%s` `%s`: %s',
             $property,
