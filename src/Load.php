@@ -24,6 +24,8 @@ final class Load implements DefinesObjectMapping
     private function __construct(string $label)
     {
         $this->label = $label;
+        $this->ownId = ['id'];
+        $this->identityColumnsFor[$label] = [$label . '_id'];
     }
 
     public static function each(string $label): self
