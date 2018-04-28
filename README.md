@@ -13,16 +13,62 @@
 
 Install using `composer require stratadox/table-loader`
 
-## About
+## What is this?
 
-Transforms the output of sql select queries into graphs of related objects.
+The `TableLoader` package is designed to transform the result of a select query into objects.
+It solves the challenge of deserialising joined table rows into objects without duplicating the entities.
 
-Enables eager loading from joined table results.
+To *load* a table means to produce objects from the associative arrays that result from a SQL query.
 
-Closely works together with the [Hydration](https://github.com/Stratadox/Hydrate) modules
-to easily integrate with mapped hydration and lazy- and extra lazy loading.
+An object that [`LoadsTables`](https://github.com/Stratadox/TableLoader/blob/master/contracts/LoadsTables.php)
+can make interrelated objects from a list of associative arrays.
 
-Prevents loading already-loaded entities by checking the [Identity Map](https://github.com/Stratadox/IdentityMap).
+Table loading works closely together with the [Hydration](https://github.com/Stratadox/Hydrate) 
+modules to easily integrate with mapped hydration and lazy- and extra lazy loading.
+
+## What does it do?
+
+The purpose of the `TableLoader` package is to transform SQL-like table results into a set of objects.
+
+### Connecting eagerly loaded relationships
+
+When eagerly loading a relationship from a SQL database, one generally performs some kind of `JOIN` query.
+
+The `TableLoader` package provides several options for converting the joined result into interconnected objects.
+
+Each entity can be given any number of `has-one` and/or `has-many` relationships.
+Bidirectional associations can be produced by assigning such relationships to both sides.
+
+Any number of tables can be joined at a time. Self-referencing joins are equally supported.
+
+### Mapping concrete subclasses
+
+When dealing with polymorphism in a SQL schema, objects are generally mapped in either of three ways:
+- [Single Table Inheritance](https://martinfowler.com/eaaCatalog/singleTableInheritance.html)
+- [Class Table Inheritance](https://martinfowler.com/eaaCatalog/classTableInheritance.html)
+- [Concrete Table Inheritance](https://martinfowler.com/eaaCatalog/concreteTableInheritance.html)
+
+The `TableLoader` supports any of these methods, so long as a `decision key` is provided. 
+(Also known as `discriminator column`)
+
+### Managing identities
+
+It can happen that some of the objects have already been loaded by a previous query.
+
+For example, let's assume we're first loading only employee `X`.
+Later on we're fetching company `Y` with all employees - including employee `X`.
+
+While we *do* want company `Y` to include employee `X` on the books, we *do not* want two copies
+of employee `X` in memory.
+
+To solve this challenge, loaded entities are added to an [Identity Map](https://github.com/Stratadox/IdentityMap).
+The table loader consults the identity map when extracting an entity from the table row data.
+A new entity is only produced if it was not already present in the map.
+
+If employee `X` had a `lazy has-one` mapping to their company, the company relation was a [`Proxy`](https://github.com/Stratadox/Proxy)
+when the employee was first loaded. 
+By loading the company `Y`, and its `eager has-many` employees mapping, the real company `Y` is
+automatically loaded into the relationship that previously held a proxy. 
 
 ## Usage Samples
 
@@ -81,11 +127,9 @@ $data = table([
 
 $make = Joined::table(
     Load::each('club')
-        ->by('id')
         ->as(Club::class, ['name' => Is::string()])
         ->havingMany('memberList', 'member', MemberList::class),
     Load::each('member')
-        ->by('id')
         ->as(Member::class, ['name' => Is::string()])
 )();
 
@@ -190,11 +234,46 @@ assert(count($course['Hacking 101']->subscribedStudents()) === 2);
 assert(count($course['Toolset maintenance']->subscribedStudents()) === 1);
 ```
 
+### Multiple joined tables:
+
+```php
+$data = table([
+    //----------+--------------+---------------+---------------+,
+    ['firm_name', 'lawyer_name', 'client_name' , 'client_value'],
+    //----------+--------------+---------------+---------------+,
+    ['The Firm' , 'Alice'      , 'John Doe'    , 10000         ],
+    ['The Firm' , 'Bob'        , 'Jackie Chan' , 56557853526   ],
+    ['The Firm' , 'Alice'      , 'Chuck Norris', 9999999999999 ],
+    ['The Firm' , 'Bob'        , 'Alfred'      , 845478        ],
+    ['Law & Co' , 'Charlie'    , 'Slender Man' , 95647467      ],
+    ['The Firm' , 'Alice'      , 'Foo Bar'     , 365667        ],
+    ['Law & Co' , 'Charlie'    , 'John Cena'   , 4697669670    ],
+    //----------+--------------+---------------+---------------+,
+]);
+
+$make = Joined::table(
+    Load::each('firm')->by('name')->as(Firm::class)->havingMany('lawyers', 'lawyer'),
+    Load::each('lawyer')->by('name')->as(Lawyer::class)->havingMany('clients', 'client'),
+    Load::each('client')->by('name')->as(Client::class)
+)();
+
+$firms = $make->from($data)['firm'];
+
+$theFirm = $firms['The Firm'];
+$lawAndCo = $firms['Law & Co'];
+
+[$alice, $bob] = $theFirm->lawyers();
+[$charlie] = $lawAndCo->lawyers();
+
+assert(3 == count($alice->clients()));
+assert(2 == count($bob->clients()));
+assert(2 == count($charlie->clients()));
+```
+
 ## To do
 
 - Deal with (/ignore) nulls.
-- Three-way join support.
-- Hydrator injection in joined table builder.
+- Make simple table builder.
+- Segregate builder interfaces.
+- Allow direct hydrator injection in joined table builder.
 - More unhappy path testing.
-- Single table inheritance in main entities.
-- Use `id` as default identification column.
