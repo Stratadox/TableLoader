@@ -4,19 +4,18 @@ declare(strict_types=1);
 namespace Stratadox\TableLoader;
 
 use Stratadox\IdentityMap\MapsObjectsByIdentity as Map;
+use Stratadox\ImmutableCollection\ImmutableCollection;
 
 /**
  * Makes partially hydrated objects from an input array.
  *
  * @author Stratadox
  */
-final class Extract implements MakesObjects
+final class Extract extends ImmutableCollection implements MakesObjects
 {
-    private $objects;
-
     private function __construct(MakesObjects ...$objects)
     {
-        $this->objects = $objects;
+        parent::__construct(...$objects);
     }
 
     /**
@@ -31,11 +30,16 @@ final class Extract implements MakesObjects
         return new self(...$objects);
     }
 
+    public function current(): MakesObjects
+    {
+        return parent::current();
+    }
+
     /** @inheritdoc */
     public function from(array $input, Map $map): ContainsResultingObjects
     {
         $result = Result::fromArray([], $map);
-        foreach ($this->objects as $objects) {
+        foreach ($this as $objects) {
             $result = $result->mergeWith($objects->from(
                 $input,
                 $result->identityMap()
