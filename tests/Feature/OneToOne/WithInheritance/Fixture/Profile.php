@@ -5,7 +5,7 @@ namespace Stratadox\TableLoader\Test\Feature\OneToOne\WithInheritance\Fixture;
 
 abstract class Profile implements DescribesTheUser
 {
-    private $about;
+    protected $about;
 
     public function __construct(string $about)
     {

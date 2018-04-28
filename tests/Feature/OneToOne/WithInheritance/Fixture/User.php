@@ -5,7 +5,7 @@ namespace Stratadox\TableLoader\Test\Feature\OneToOne\WithInheritance\Fixture;
 
 abstract class User
 {
-    private $name;
+    protected $name;
 
     public function __construct(string $name)
     {

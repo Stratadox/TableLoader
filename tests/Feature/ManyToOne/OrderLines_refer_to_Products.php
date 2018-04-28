@@ -37,13 +37,11 @@ class OrderLines_refer_to_Products extends TestCase
 
         $make = Joined::table(
             Load::each('product')
-                ->by('id')
                 ->as(Product::class, [
                     'name' => Is::string(),
                     'price' => Is::int(),
                 ]),
             Load::each('line')
-                ->by('id')
                 ->as(OrderLine::class, [
                     'quantity' => Is::int()
                 ])

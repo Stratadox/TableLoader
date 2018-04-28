@@ -45,42 +45,40 @@ class Users_have_a_profile extends TestCase
                 InCase::of('customer')
                     ->as(Customer::class)
                     ->havingOne('customerProfile', 'profile')
-            ])->by('id')->with([
-                'name' => Is::string()
-            ]),
+            ])->with(['name' => Is::string()]),
             Decide::which('profile')->basedOn('type', ...[
                 InCase::of('admin')->as(AdminProfile::class, ['level' => Is::int()]),
                 InCase::of('regular')->as(RegularProfile::class),
                 InCase::of('vip')->as(VipProfile::class),
-            ])->by('id')->with(['about' => Is::string()])
+            ])->with(['about' => Is::string()])
         )();
 
         assert($make instanceof LoadsTable);
 
         $result = $make->from($data);
 
-        $admin = $result['users']['admin:1'];
+        $admin = $result['user']['admin:1'];
         assert($admin instanceof Admin);
-        assert($admin->name() === 'Mr. Admin');
+        $this->assertSame('Mr. Admin', $admin->name());
 
         $adminProfile = $admin->profile();
         assert($adminProfile instanceof AdminProfile);
-        assert($adminProfile->about() === 'Level 10 admin profile: This is Admin.');
+        $this->assertSame('Level 10 admin profile: This is Admin.', $adminProfile->about());
 
-        $alice = $result['users']['customer:1'];
+        $alice = $result['user']['customer:1'];
         assert($alice instanceof Customer);
-        assert($alice->name() === 'Alice');
+        $this->assertSame('Alice', $alice->name());
 
         $aliceProfile = $alice->profile();
         assert($aliceProfile instanceof VipProfile);
-        assert($aliceProfile->about() === 'VIP profile: Hello world!');
+        $this->assertSame('VIP profile: Hello world!', $aliceProfile->about());
 
-        $john = $result['users']['customer:2'];
+        $john = $result['user']['customer:2'];
         assert($john instanceof Customer);
-        assert($john->name() === 'John Doe');
+        $this->assertSame('John Doe', $john->name());
 
         $johnProfile = $john->profile();
         assert($johnProfile instanceof RegularProfile);
-        assert($johnProfile->about() === 'Profile: Hi there!');
+        $this->assertSame('Profile: Hi there!', $johnProfile->about());
     }
 }

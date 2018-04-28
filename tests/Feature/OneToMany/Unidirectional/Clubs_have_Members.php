@@ -39,11 +39,9 @@ class Clubs_have_Members extends TestCase
 
         $make = Joined::table(
             Load::each('club')
-                ->by('id')
                 ->as(Club::class, ['name' => Is::string()])
                 ->havingMany('memberList', 'member', MemberList::class),
             Load::each('member')
-                ->by('id')
                 ->as(Member::class, ['name' => Is::string()])
         )();
 

@@ -39,12 +39,9 @@ class Users_have_friends extends TestCase
 
         $make = Joined::table(
             Load::each('user')
-                ->by('id')
                 ->as(User::class, ['name' => Is::string()])
                 ->havingMany('friends', 'friend'),
-            Load::each('friend')
-                ->by('id')
-                ->as(User::class)
+            Load::each('friend')->as(User::class)
         )();
 
         assert($make instanceof LoadsTable);

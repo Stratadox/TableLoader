@@ -67,17 +67,25 @@ class Load_objects_according_to_the_mapping extends TestCase
     function finding_the_identifying_columns()
     {
         $howToLoad = Load::each('thing')
-            ->by('id')
             ->as(Thing::class);
 
         $this->assertEquals(['thing_id'], $howToLoad->identityColumns());
     }
 
     /** @test */
+    function finding_the_custom_identifying_columns()
+    {
+        $howToLoad = Load::each('thing')
+            ->by('name', 'id')
+            ->as(Thing::class);
+
+        $this->assertEquals(['thing_name', 'thing_id'], $howToLoad->identityColumns());
+    }
+
+    /** @test */
     function defining_mapped_object_creation()
     {
         $howToLoad = Load::each('thing')
-            ->by('id')
             ->as(Thing::class, [
                 'id' => Is::int(),
                 'name' => Is::string()
