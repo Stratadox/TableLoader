@@ -12,6 +12,7 @@ use Stratadox\TableLoader\Identified;
 use Stratadox\TableLoader\Result;
 use Stratadox\TableLoader\Test\Unit\Fixture\Bar;
 use Stratadox\TableLoader\Test\Unit\Fixture\Basket;
+use Stratadox\TableLoader\Test\Unit\Fixture\Customer;
 use Stratadox\TableLoader\Test\Unit\Fixture\ExceptionalThings;
 use Stratadox\TableLoader\Test\Unit\Fixture\Foo;
 use Stratadox\TableLoader\Test\Unit\Fixture\Thing;
@@ -105,6 +106,44 @@ class HasMany_collects_related_objects extends TestCase
             new Things(new Thing(3, 'Foo'), new Thing(4, 'Bar')),
             $thingsForInBasket['foobar']
         );
+    }
+
+    /** @test */
+    function ignoring_duplicate_entries()
+    {
+        $relation = HasMany::in('baskets');
+
+        $data = [
+            ['customer_name' => 'Alice', 'basket_name' => 'letters', 'thing_id' => 1, 'thing_name' => 'A'],
+            ['customer_name' => 'Alice', 'basket_name' => 'letters', 'thing_id' => 2, 'thing_name' => 'B'],
+            ['customer_name' => 'Alice', 'basket_name' => 'foobar', 'thing_id' => 3, 'thing_name' => 'Foo'],
+            ['customer_name' => 'Alice', 'basket_name' => 'foobar', 'thing_id' => 4, 'thing_name' => 'Bar'],
+        ];
+
+        $objects = Result::fromArray([
+            'customer' => [
+                'Alice' => new Customer('Alice')
+            ],
+            'basket' => [
+                'letters' => new Basket('letters', null),
+                'foobar' => new Basket('foobar', null),
+            ],
+            'thing' => [
+                'A' => new Thing(1, 'A'),
+                'B' => new Thing(2, 'B'),
+                'Foo' => new Thing(3, 'Foo'),
+                'Bar' => new Thing(4, 'Bar'),
+            ]
+        ]);
+
+        $basketsForCustomer = $relation->load(
+            From::the('customer', Identified::by('customer_name')),
+            $data,
+            To::the('basket', Identified::by('basket_name')),
+            $objects
+        )['baskets'];
+
+        $this->assertCount(2, $basketsForCustomer['Alice']);
     }
 
     /** @test */
