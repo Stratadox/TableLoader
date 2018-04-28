@@ -14,7 +14,7 @@ use Throwable;
  *
  * @author Stratadox
  */
-final class SimpleTable implements LoadsTable
+final class SimpleTable implements LoadsTables
 {
     private $label;
     private $make;

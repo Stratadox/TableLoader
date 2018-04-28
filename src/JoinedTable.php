@@ -11,7 +11,7 @@ use Stratadox\IdentityMap\MapsObjectsByIdentity;
  *
  * @author Stratadox
  */
-final class JoinedTable implements LoadsTable
+final class JoinedTable implements LoadsTables
 {
     private $makeObjects;
     private $relationships;

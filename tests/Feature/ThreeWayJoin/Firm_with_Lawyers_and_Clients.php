@@ -7,7 +7,7 @@ use function assert;
 use PHPUnit\Framework\TestCase;
 use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTable;
+use Stratadox\TableLoader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\ThreeWayJoin\Fixture\Client;
 use Stratadox\TableLoader\Test\Feature\ThreeWayJoin\Fixture\Firm;
 use Stratadox\TableLoader\Test\Feature\ThreeWayJoin\Fixture\Lawyer;
@@ -43,7 +43,7 @@ class Firm_with_Lawyers_and_Clients extends TestCase
             Load::each('client')->by('name')->as(Client::class)
         )();
 
-        assert($make instanceof LoadsTable);
+        assert($make instanceof LoadsTables);
 
         /** @var Firm[] $firms */
         $firms = $make->from($data)['firm'];

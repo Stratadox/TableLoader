@@ -10,7 +10,7 @@ use Stratadox\Hydration\Mapper\Instruction\Is;
 use Stratadox\Hydration\Mapper\Instruction\Has;
 use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTable;
+use Stratadox\TableLoader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\OneToMany\Bidirectional\Fixture\Book;
 use Stratadox\TableLoader\Test\Feature\OneToMany\Bidirectional\Fixture\Name;
 use Stratadox\TableLoader\Test\Feature\OneToMany\Bidirectional\Fixture\Student;
@@ -51,7 +51,7 @@ class Students_own_Books extends TestCase
                 ->havingOne('owner', 'student')
         )();
 
-        assert($make instanceof LoadsTable);
+        assert($make instanceof LoadsTables);
 
         $objects = $make->from($data);
         /** @var iterable|Student[] $students */

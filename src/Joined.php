@@ -29,7 +29,7 @@ final class Joined extends ImmutableCollection implements MakesTableLoader
     }
 
     /** @inheritdoc */
-    public function __invoke(): LoadsTable
+    public function __invoke(): LoadsTables
     {
         $wiring = [];
         $objects = [];

@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Stratadox\Hydration\Mapper\Instruction\Is;
 use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTable;
+use Stratadox\TableLoader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\ManyToOne\Fixture\OrderLine;
 use Stratadox\TableLoader\Test\Feature\ManyToOne\Fixture\Product;
 use Stratadox\TableLoader\Test\Helper\TableTransforming;
@@ -48,7 +48,7 @@ class OrderLines_refer_to_Products extends TestCase
                 ->havingOne('product', 'product')
         )();
 
-        assert($make instanceof LoadsTable);
+        assert($make instanceof LoadsTables);
 
         /** @var OrderLine[] $orderLines */
         $orderLines = $make->from($data)['line'];

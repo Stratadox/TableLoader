@@ -10,7 +10,7 @@ use Stratadox\TableLoader\ContainsResultingObjects as ResultingObjects;
  *
  * @author Stratadox
  */
-interface LoadsTable
+interface LoadsTables
 {
     /**
      * Transforms table data into an object collection.

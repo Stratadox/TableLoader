@@ -7,7 +7,7 @@ use function assert;
 use PHPUnit\Framework\TestCase;
 use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTable;
+use Stratadox\TableLoader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\ManyToMany\Fixture\Course;
 use Stratadox\TableLoader\Test\Feature\ManyToMany\Fixture\Courses;
 use Stratadox\TableLoader\Test\Feature\ManyToMany\Fixture\Student;
@@ -46,7 +46,7 @@ class Students_follow_Courses extends TestCase
                 ->havingMany('subscribedStudents', 'student', Students::class)
         )();
 
-        assert($make instanceof LoadsTable);
+        assert($make instanceof LoadsTables);
 
         $objects = $make->from($data);
         /** @var iterable|Student[] $student */

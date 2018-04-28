@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Stratadox\Hydration\Mapper\Instruction\Is;
 use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTable;
+use Stratadox\TableLoader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\OneToMany\SelfReferencing\Fixture\User;
 use Stratadox\TableLoader\Test\Helper\TableTransforming;
 
@@ -44,7 +44,7 @@ class Users_have_friends extends TestCase
             Load::each('friend')->as(User::class)
         )();
 
-        assert($make instanceof LoadsTable);
+        assert($make instanceof LoadsTables);
 
         /** @var User[] $users */
         $users = $make->from($data)['user'];

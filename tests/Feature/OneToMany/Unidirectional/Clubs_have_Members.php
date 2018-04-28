@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Stratadox\Hydration\Mapper\Instruction\Is;
 use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTable;
+use Stratadox\TableLoader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\OneToMany\Unidirectional\Fixture\Club;
 use Stratadox\TableLoader\Test\Feature\OneToMany\Unidirectional\Fixture\Member;
 use Stratadox\TableLoader\Test\Feature\OneToMany\Unidirectional\Fixture\MemberList;
@@ -45,7 +45,7 @@ class Clubs_have_Members extends TestCase
                 ->as(Member::class, ['name' => Is::string()])
         )();
 
-        assert($make instanceof LoadsTable);
+        assert($make instanceof LoadsTables);
 
         $objects = $make->from($data);
         /** @var Club[] $clubs */

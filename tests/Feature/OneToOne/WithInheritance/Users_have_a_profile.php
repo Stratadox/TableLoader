@@ -9,7 +9,7 @@ use Stratadox\Hydration\Mapper\Instruction\Is;
 use Stratadox\TableLoader\Decide;
 use Stratadox\TableLoader\InCase;
 use Stratadox\TableLoader\Joined;
-use Stratadox\TableLoader\LoadsTable;
+use Stratadox\TableLoader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\OneToOne\WithInheritance\Fixture\Admin;
 use Stratadox\TableLoader\Test\Feature\OneToOne\WithInheritance\Fixture\AdminProfile;
 use Stratadox\TableLoader\Test\Feature\OneToOne\WithInheritance\Fixture\Customer;
@@ -53,7 +53,7 @@ class Users_have_a_profile extends TestCase
             ])->with(['about' => Is::string()])
         )();
 
-        assert($make instanceof LoadsTable);
+        assert($make instanceof LoadsTables);
 
         $result = $make->from($data);
 

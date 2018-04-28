@@ -12,8 +12,8 @@ interface MakesTableLoader
     /**
      * Makes a table-to-object mapper.
      *
-     * @return LoadsTable The table-to-object mapper.
+     * @return LoadsTables The table-to-object mapper.
      * @throws CannotMakeTableMapping
      */
-    public function __invoke(): LoadsTable;
+    public function __invoke(): LoadsTables;
 }

@@ -8,7 +8,7 @@ use Stratadox\Hydration\Mapper\Instruction\Has;
 use Stratadox\Hydration\Mapper\Instruction\Is;
 use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTable;
+use Stratadox\TableLoader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\PreExistingEntities\Fixture\Box;
 use Stratadox\TableLoader\Test\Feature\PreExistingEntities\Fixture\BoxProxy;
 use Stratadox\TableLoader\Test\Feature\PreExistingEntities\Fixture\Thing;
@@ -24,7 +24,7 @@ class Boxes_filled_with_Things extends TestCase
     /** @test */
     function loading_boxes_with_their_things_using_previously_loaded_entities()
     {
-        /** @var LoadsTable $make */
+        /** @var LoadsTables $make */
         $make = Joined::table(
             Load::each('thing')
                 ->by('name')
@@ -52,7 +52,7 @@ class Boxes_filled_with_Things extends TestCase
             'The box should be a proxy for now: we did not load all Things yet.'
         );
 
-        /** @var LoadsTable $make */
+        /** @var LoadsTables $make */
         $make = Joined::table(
             Load::each('box')
                 ->by('id')
