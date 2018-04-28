@@ -32,7 +32,7 @@ final class Decide implements DefinesMultipleClassMapping
         $this->identityColumnsFor[$label] = [$label . '_type', $label . '_id'];
     }
 
-    public static function which(string $label): self
+    public static function which(string $label): DefinesMultipleClassMapping
     {
         return new self($label);
     }

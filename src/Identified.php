@@ -31,9 +31,9 @@ final class Identified implements IdentifiesEntities
      *
      * @param string ...$identifyingColumns The columns to use for identification.
      *
-     * @return Identified                   The identifying object.
+     * @return IdentifiesEntities           The identifying object.
      */
-    public static function by(string ...$identifyingColumns): self
+    public static function by(string ...$identifyingColumns): IdentifiesEntities
     {
         return new self($identifyingColumns, []);
     }

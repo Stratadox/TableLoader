@@ -29,13 +29,12 @@ final class From implements KnowsWhereToLookFrom
      * @param string             $label    The label of the source objects.
      * @param IdentifiesEntities $identity The mechanism to identify the source
      *                                     entity of the row.
-     *
-     * @return From
+     * @return KnowsWhereToLookFrom        The source locator.
      */
     public static function the(
         string $label,
         IdentifiesEntities $identity
-    ): self {
+    ): KnowsWhereToLookFrom {
         return new self($label, $identity, null);
     }
 
@@ -46,14 +45,13 @@ final class From implements KnowsWhereToLookFrom
      * @param string             $label    The label of the source objects.
      * @param IdentifiesEntities $identity The mechanism to identify the source
      *                                     entity of the row.
-     *
-     * @return From
+     * @return KnowsWhereToLookFrom        The source locator.
      */
     public static function onlyThe(
         string $class,
         string $label,
         IdentifiesEntities $identity
-    ): self {
+    ): KnowsWhereToLookFrom {
         return new self($label, $identity, $class);
     }
 

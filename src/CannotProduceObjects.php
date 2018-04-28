@@ -16,8 +16,10 @@ final class CannotProduceObjects
     extends UnexpectedValueException
     implements CannotMakeTableMapping
 {
-    public static function encountered(Throwable $exception, string $label): self
-    {
+    public static function encountered(
+        Throwable $exception,
+        string $label
+    ): CannotMakeTableMapping {
         return new CannotProduceObjects(withMessage(
             'Cannot produce the `%s` objects: %s',
             $label,

@@ -20,12 +20,14 @@ final class MissingIdentifyingColumn
      * Produces an exception for when the input data is missing a required
      * identifier column.
      *
-     * @param array  $inputData         The data that lacks an identifier.
-     * @param string $identifier        The identifier that is missing.
-     * @return MissingIdentifyingColumn The exception to throw.
+     * @param array  $inputData     The data that lacks an identifier.
+     * @param string $identifier    The identifier that is missing.
+     * @return CannotIdentifyEntity The exception to throw.
      */
-    public static function inThe(array $inputData, string $identifier): self
-    {
+    public static function inThe(
+        array $inputData,
+        string $identifier
+    ): CannotIdentifyEntity {
         return new MissingIdentifyingColumn(withMessage(
             'Missing the identifying column `%s` in the input data: %s',
             $identifier,

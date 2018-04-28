@@ -36,14 +36,13 @@ final class SimpleTable implements LoadsTables
      * @param string             $label    The label to apply.
      * @param Hydrates           $hydrator The hydrator that produces the objects.
      * @param IdentifiesEntities $identity The row identification mechanism.
-     *
-     * @return SimpleTable                 The simple table converter.
+     * @return LoadsTables                 The simple table converter.
      */
     public static function converter(
         string $label,
         Hydrates $hydrator,
         IdentifiesEntities $identity
-    ): self {
+    ): LoadsTables {
         return new self($label, $hydrator, $identity);
     }
 

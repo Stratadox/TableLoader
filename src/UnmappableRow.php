@@ -23,14 +23,13 @@ final class UnmappableRow
      * @param Throwable $exception The exception that was encountered.
      * @param string    $label     The label for the failed entity type.
      * @param array     $input     The input data that could not be mapped.
-     *
-     * @return UnmappableRow       The exception to throw.
+     * @return CannotLoadTable     The exception to throw.
      */
     public static function encountered(
         Throwable $exception,
         string $label,
         array $input
-    ): self {
+    ): CannotLoadTable {
         return new UnmappableRow(withMessage(
             'Could not map the `%s` from `%s`: %s',
             $label,

@@ -16,10 +16,11 @@ final class Joined extends ImmutableCollection implements MakesTableLoader
      * Makes a new builder for joined table mappers.
      *
      * @param DefinesObjectMapping ...$objectMappings
-     * @return Joined
+     * @return MakesTableLoader
      */
-    public static function table(DefinesObjectMapping ...$objectMappings): self
-    {
+    public static function table(
+        DefinesObjectMapping ...$objectMappings
+    ): MakesTableLoader {
         return new self(...$objectMappings);
     }
 

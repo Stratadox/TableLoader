@@ -29,11 +29,12 @@ final class HasMany implements MakesConnections
      *
      * @param string        $property   The property to map.
      * @param Hydrates|null $collection The collection hydrator to use.
-     *
-     * @return HasMany                  The relationship connector.
+     * @return MakesConnections         The relationship connector.
      */
-    public static function in(string $property, Hydrates $collection = null): self
-    {
+    public static function in(
+        string $property,
+        Hydrates $collection = null
+    ): MakesConnections {
         return new self($property, $collection ?: ArrayHydrator::create());
     }
 

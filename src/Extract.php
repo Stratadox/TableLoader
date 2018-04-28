@@ -24,9 +24,9 @@ final class Extract implements MakesObjects
      *
      * @param MakesObjects ...$objects The other object extractors.
      *
-     * @return Extract                 The composed extractor.
+     * @return MakesObjects            The composed extractor.
      */
-    public static function these(MakesObjects ...$objects): self
+    public static function these(MakesObjects ...$objects): MakesObjects
     {
         return new self(...$objects);
     }

@@ -28,7 +28,7 @@ final class Load implements DefinesSingleClassMapping
         $this->identityColumnsFor[$label] = [$label . '_id'];
     }
 
-    public static function each(string $label): self
+    public static function each(string $label): DefinesSingleClassMapping
     {
         return new self($label);
     }

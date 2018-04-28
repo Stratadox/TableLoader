@@ -36,13 +36,13 @@ final class Objects implements MakesObjects
      *                                                  array.
      * @param IdentifiesEntities $forIndexation         The row identification
      *                                                  mechanism.
-     * @return Objects                                  The object extractor.
+     * @return MakesObjects                             The object extractor.
      */
     public static function producedByThis(
         Hydrates $theObjects,
         FiltersTheArray $toTheRelevantDataOnly,
         IdentifiesEntities $forIndexation
-    ): self {
+    ): MakesObjects {
         return new self($theObjects, $toTheRelevantDataOnly, $forIndexation);
     }
 

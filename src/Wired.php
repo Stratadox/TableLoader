@@ -25,9 +25,9 @@ final class Wired extends ImmutableCollection implements WiresObjects
      * Makes a new object that wires other objects together.
      *
      * @param WiresObjects ...$relations The relations to wire together.
-     * @return Wired                     The wiring object.
+     * @return WiresObjects              The wiring object.
      */
-    public static function together(WiresObjects ...$relations): self
+    public static function together(WiresObjects ...$relations): WiresObjects
     {
         return new self(...$relations);
     }

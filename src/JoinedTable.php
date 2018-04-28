@@ -30,12 +30,12 @@ final class JoinedTable implements LoadsTables
      * @param MakesObjects $makesObjects  The object extractor to use.
      * @param WiresObjects $relationships The relationship wiring.
      *
-     * @return JoinedTable                The joined table converter.
+     * @return LoadsTables                The joined table converter.
      */
     public static function converter(
         MakesObjects $makesObjects,
         WiresObjects $relationships
-    ): self {
+    ): LoadsTables {
         return new self($makesObjects, $relationships);
     }
 

@@ -15,8 +15,10 @@ final class CannotMakeMapping
     extends UnexpectedValueException
     implements CannotMakeTableMapping
 {
-    public static function missingTheIdentityColumns(string $theirLabel, string $ourLabel): self
-    {
+    public static function missingTheIdentityColumns(
+        string $theirLabel,
+        string $ourLabel
+    ): CannotMakeTableMapping {
         return new CannotMakeMapping(withMessage(
             'Cannot make a mapping for the `%s` objects: ' .
             'Cannot resolve the identifying columns for the `%s` relation.',
@@ -25,8 +27,9 @@ final class CannotMakeMapping
         ));
     }
 
-    public static function missingTheLabelFor(string $choiceTrigger): self
-    {
+    public static function missingTheLabelFor(
+        string $choiceTrigger
+    ): CannotMakeTableMapping {
         return new CannotMakeMapping(withMessage(
             'Cannot make a mapping for the `%s` objects: ' .
             'The label for the source relation was not provided.',

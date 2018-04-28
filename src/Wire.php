@@ -36,13 +36,13 @@ final class Wire implements WiresObjects
      * @param KnowsWhereToLookFrom $from     Identification for the source entity.
      * @param KnowsWhereToLook     $to       Identification for the target entity.
      * @param MakesConnections     $relation The type of relationship.
-     * @return Wire                          The wiring object.
+     * @return WiresObjects                  The wiring object.
      */
     public static function it(
         KnowsWhereToLookFrom $from,
         KnowsWhereToLook $to,
         MakesConnections $relation
-    ): self {
+    ): WiresObjects {
         return new Wire($from, $to, $relation);
     }
 

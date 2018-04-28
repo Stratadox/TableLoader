@@ -32,10 +32,12 @@ final class Prefixed implements FiltersTheArray
      *
      * @param string $label     The label to use in the prefix.
      * @param string $separator The separator between the label and the field.
-     * @return Prefixed         The prefix limiter.
+     * @return FiltersTheArray  The prefix limiter.
      */
-    public static function with(string $label, string $separator = '_'): self
-    {
+    public static function with(
+        string $label,
+        string $separator = '_'
+    ): FiltersTheArray {
         return new self($label, $separator);
     }
 

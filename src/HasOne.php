@@ -20,11 +20,10 @@ final class HasOne implements MakesConnections
     /**
      * Makes a connector for a has-one type relationship.
      *
-     * @param string $property The property to map.
-     *
-     * @return HasOne          The relationship connector.
+     * @param string $property  The property to map.
+     * @return MakesConnections The relationship connector.
      */
-    public static function in(string $property): self
+    public static function in(string $property): MakesConnections
     {
         return new self($property);
     }

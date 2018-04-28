@@ -19,12 +19,11 @@ final class UnmappableRelationship
     /**
      * Produces an exception for when the relationship could not be mapped.
      *
-     * @param Throwable $exception    The exception that was encountered.
-     * @param string    $property     The property of the relationship.
-     * @param string    $owner        The label of the owning side.
-     * @param string    $id           The id of the owning side.
-     *
-     * @return UnmappableRelationship The exception to throw.
+     * @param Throwable $exception The exception that was encountered.
+     * @param string    $property  The property of the relationship.
+     * @param string    $owner     The label of the owning side.
+     * @param string    $id        The id of the owning side.
+     * @return CannotLoadTable     The exception to throw.
      */
     public static function encountered(
         Throwable $exception,
