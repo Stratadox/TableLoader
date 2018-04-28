@@ -114,10 +114,10 @@ class HasMany_collects_related_objects extends TestCase
         $relation = HasMany::in('baskets');
 
         $data = [
-            ['customer_name' => 'Alice', 'basket_name' => 'letters', 'thing_id' => 1, 'thing_name' => 'A'],
-            ['customer_name' => 'Alice', 'basket_name' => 'letters', 'thing_id' => 2, 'thing_name' => 'B'],
-            ['customer_name' => 'Alice', 'basket_name' => 'foobar', 'thing_id' => 3, 'thing_name' => 'Foo'],
-            ['customer_name' => 'Alice', 'basket_name' => 'foobar', 'thing_id' => 4, 'thing_name' => 'Bar'],
+            ['customer_name' => 'Alice', 'basket_id' => 1, 'basket_name' => 'letters', 'thing_id' => 1, 'thing_name' => 'A'],
+            ['customer_name' => 'Alice', 'basket_id' => 1, 'basket_name' => 'letters', 'thing_id' => 2, 'thing_name' => 'B'],
+            ['customer_name' => 'Alice', 'basket_id' => 2, 'basket_name' => 'letters', 'thing_id' => 3, 'thing_name' => 'Foo'],
+            ['customer_name' => 'Alice', 'basket_id' => 2, 'basket_name' => 'letters', 'thing_id' => 4, 'thing_name' => 'Bar'],
         ];
 
         $objects = Result::fromArray([
@@ -125,8 +125,8 @@ class HasMany_collects_related_objects extends TestCase
                 'Alice' => new Customer('Alice')
             ],
             'basket' => [
-                'letters' => new Basket('letters', null),
-                'foobar' => new Basket('foobar', null),
+                '1' => new Basket('letters', null),
+                '2' => new Basket('letters', null),
             ],
             'thing' => [
                 'A' => new Thing(1, 'A'),
@@ -139,7 +139,7 @@ class HasMany_collects_related_objects extends TestCase
         $basketsForCustomer = $relation->load(
             From::the('customer', Identified::by('customer_name')),
             $data,
-            To::the('basket', Identified::by('basket_name')),
+            To::the('basket', Identified::by('basket_id')),
             $objects
         )['baskets'];
 
