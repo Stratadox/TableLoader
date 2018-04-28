@@ -9,6 +9,11 @@ use Stratadox\IdentityMap\MapsObjectsByIdentity;
 use Stratadox\IdentityMap\NoSuchObject;
 use Stratadox\TableLoader\ContainsResultingObjects as Result;
 
+/**
+ * Contains the resulting objects and the updated identity map.
+ *
+ * @author Stratadox
+ */
 interface ContainsResultingObjects extends ArrayAccess, IteratorAggregate
 {
     /**

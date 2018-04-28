@@ -18,8 +18,8 @@ interface MakesConnections
      * @param array[]          $data    List of associative rows.
      * @param KnowsWhereToLook $to      Where to map to.
      * @param Result           $objects List of objects as [label => [id => instance]].
-     * @return array[]                  Relations as [$property => $relation]
-     * @throws CannotLoadTable
+     * @return array[]                  Relations as [$property => $relation].
+     * @throws CannotLoadTable          When the entity could not be identified or hydrated.
      */
     public function load(
         KnowsWhereToLook $from,

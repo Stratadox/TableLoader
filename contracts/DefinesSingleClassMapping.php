@@ -4,8 +4,20 @@ namespace Stratadox\TableLoader;
 
 use Stratadox\HydrationMapper\InstructsHowToMap;
 
+/**
+ * Defines how to map an object for which the class is known in advance.
+ *
+ * @author Stratadox
+ */
 interface DefinesSingleClassMapping extends DefinesObjectMapping
 {
+    /**
+     * Define which columns to use in identifying this entity.
+     *
+     * @param string ...$columns The columns to use in the identification of
+     *                           the entity.
+     * @return self|static       The single class mapping definition.
+     */
     public function by(string ...$columns): DefinesSingleClassMapping;
 
     /**
