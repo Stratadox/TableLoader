@@ -100,6 +100,22 @@ class Identified_records_have_identification_keys extends TestCase
     }
 
     /** @test */
+    function recognising_that_the_id_is_made_of_null_values()
+    {
+        $identifier = Identified::by('first', 'second');
+
+        $this->assertTrue($identifier->isNullFor(['first' => null, 'second' => null]));
+    }
+
+    /** @test */
+    function recognising_that_the_id_is_not_made_of_only_null_values()
+    {
+        $identifier = Identified::by('first', 'second');
+
+        $this->assertFalse($identifier->isNullFor(['first' => 1, 'second' => null]));
+    }
+
+    /** @test */
     function throwing_an_exception_when_the_identifying_field_is_missing()
     {
         $identifier = Identified::by('id');
