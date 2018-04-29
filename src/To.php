@@ -8,7 +8,7 @@ namespace Stratadox\TableLoader;
  *
  * @author Stratadox
  */
-final class To implements KnowsWhereToLook
+final class To implements KnowsWhereToLookTo
 {
     private $who;
     private $identity;
@@ -46,4 +46,9 @@ final class To implements KnowsWhereToLook
         return $this->identity->forLoading($relationship);
     }
 
+    /** @inheritdoc */
+    public function ignoreThe(array $row): bool
+    {
+        return $this->identity->isNullFor($row);
+    }
 }
