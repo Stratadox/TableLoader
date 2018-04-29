@@ -176,7 +176,7 @@ class HasMany_collects_related_objects extends TestCase
         )['things'];
 
         $this->assertCount(2, $thingsForInBasket['letters']);
-//        $this->assertArrayNotHasKey('empty', $thingsForInBasket);
+        $this->assertArrayNotHasKey('empty', $thingsForInBasket);
     }
 
     /** @test */
