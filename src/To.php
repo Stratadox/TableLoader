@@ -25,12 +25,12 @@ final class To implements KnowsWhereToLookTo
      * @param string             $label    The label of the source objects.
      * @param IdentifiesEntities $identity The mechanism to identify the target
      *                                     entity of the row.
-     * @return KnowsWhereToLook
+     * @return KnowsWhereToLookTo
      */
     public static function the(
         string $label,
         IdentifiesEntities $identity
-    ): KnowsWhereToLook {
+    ): KnowsWhereToLookTo {
         return new self($label, $identity);
     }
 
