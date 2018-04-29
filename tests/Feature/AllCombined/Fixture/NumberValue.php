@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader\Test\Feature\AllCombined\Fixture;
 
-final class IntValue implements ReasonToBuy
+final class NumberValue implements ReasonToBuy
 {
     private $value;
 

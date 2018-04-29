@@ -15,7 +15,7 @@ use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
 use Stratadox\TableLoader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\AllCombined\Fixture\Feature;
-use Stratadox\TableLoader\Test\Feature\AllCombined\Fixture\IntValue;
+use Stratadox\TableLoader\Test\Feature\AllCombined\Fixture\NumberValue;
 use Stratadox\TableLoader\Test\Feature\AllCombined\Fixture\Money;
 use Stratadox\TableLoader\Test\Feature\AllCombined\Fixture\NumberAttribute;
 use Stratadox\TableLoader\Test\Feature\AllCombined\Fixture\Prices;
@@ -72,13 +72,13 @@ class Loading_a_complex_Shop_domain extends TestCase
 
             Load::each('price')->as(Money::class, [
                 'currency' => In::key('iso'),
-                'amount' => Is::int()
+                'amount' => Is::int(),
             ])->by('iso', 'amount'),
 
             Decide::which('reason')->basedOn('type', ...[
                 InCase::of('feature')->as(Feature::class),
                 InCase::of('numeric')->as(NumberAttribute::class, [
-                    'value' => Has::one(IntValue::class)->with('value', Is::intInKey('int'))
+                    'value' => Has::one(NumberValue::class)->with('value', Is::intInKey('int'))
                 ]),
                 InCase::of('text')->as(TextAttribute::class, [
                     'value' => Has::one(TextValue::class)->with('value', Is::stringInKey('x_text'))
