@@ -36,4 +36,12 @@ interface IdentifiesEntities
      * @throws CannotIdentifyEntity When identifying columns are missing.
      */
     public function forIdentityMap(array $row): string;
+
+    /**
+     * Checks whether all identifying columns in the row are null valued.
+     *
+     * @param array $row The data to identify.
+     * @return bool      Whether the id for this row is null.
+     */
+    public function isNullFor(array $row): bool;
 }

@@ -30,6 +30,7 @@ final class Extract extends ImmutableCollection implements MakesObjects
         return new self(...$objects);
     }
 
+    /** @inheritdoc */
     public function current(): MakesObjects
     {
         return parent::current();

@@ -23,7 +23,10 @@ final class Identified implements IdentifiesEntities
     private function __construct(array $identifyingColumns, array $forLoading)
     {
         $this->identifyingColumns = $identifyingColumns;
-        $this->columnsForLoading = $forLoading;
+        $this->columnsForLoading = array_merge(
+            $forLoading,
+            $this->identifyingColumns
+        );
     }
 
     /**
@@ -53,10 +56,17 @@ final class Identified implements IdentifiesEntities
     /** @inheritdoc */
     public function forLoading(array $row): string
     {
-        return $this->identifierFor($row, array_merge(
-            $this->columnsForLoading,
-            $this->identifyingColumns
-        ));
+        return $this->identifierFor($row, $this->columnsForLoading);
+    }
+
+    public function isNullFor(array $row): bool
+    {
+        foreach ($this->columnsForLoading as $column) {
+            if (null !== $row[$column]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** @throws CannotIdentifyEntity */

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader;
 
+use function is_null;
 use Stratadox\Hydrator\CannotHydrate;
 use Stratadox\Hydrator\Hydrates;
 use Stratadox\IdentityMap\AlreadyThere;
@@ -54,6 +55,9 @@ final class Objects implements MakesObjects
         $label = $this->relevantData->label();
         $objects = [];
         foreach ($data as $row) {
+            if ($this->identifier->isNullFor($row)) {
+                continue;
+            }
             $hash = $this->identifier->forLoading($row);
             if (isset($objects[$hash])) {
                 continue;
