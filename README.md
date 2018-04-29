@@ -272,8 +272,7 @@ assert(2 == count($charlie->clients()));
 
 ## To do
 
-- Deal with (/ignore) nulls.
 - Make simple table builder.
 - Segregate builder interfaces.
-- Allow direct hydrator injection in joined table builder.
+- Allow direct hydrator injection in joined table builder?
 - More unhappy path testing.
