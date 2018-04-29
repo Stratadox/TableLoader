@@ -147,6 +147,39 @@ class HasMany_collects_related_objects extends TestCase
     }
 
     /** @test */
+    function ignoring_entries_that_consist_of_null_values()
+    {
+        $relation = HasMany::in('things');
+
+        $data = [
+            ['basket_name' => 'letters', 'thing_id' => 1, 'thing_name' => 'A'],
+            ['basket_name' => 'letters', 'thing_id' => 2, 'thing_name' => 'B'],
+            ['basket_name' => 'empty', 'thing_id' => null, 'thing_name' => null],
+        ];
+
+        $objects = Result::fromArray([
+            'basket' => [
+                'letters' => new Basket('letters', null),
+                'empty' => new Basket('empty', null),
+            ],
+            'thing' => [
+                '1' => new Thing(1, 'A'),
+                '2' => new Thing(2, 'B'),
+            ]
+        ]);
+
+        $thingsForInBasket = $relation->load(
+            From::the('basket', Identified::by('basket_name')),
+            $data,
+            To::the('thing', Identified::by('thing_id')),
+            $objects
+        )['things'];
+
+        $this->assertCount(2, $thingsForInBasket['letters']);
+//        $this->assertArrayNotHasKey('empty', $thingsForInBasket);
+    }
+
+    /** @test */
     function throwing_an_exception_when_the_collection_could_not_be_produced()
     {
         $relation = HasMany::in('things', VariadicConstructor::forThe(ExceptionalThings::class));
