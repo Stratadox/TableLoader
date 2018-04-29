@@ -25,4 +25,18 @@ class To_one_entity_from_another extends TestCase
         $to = To::the('foo', Identified::by('name'));
         $this->assertSame('A', $to->this(['name' => 'A']));
     }
+
+    /** @test */
+    function recognising_when_to_ignore_a_row()
+    {
+        $to = To::the('foo', Identified::by('name'));
+        $this->assertTrue($to->ignoreThe(['name' => null]));
+    }
+
+    /** @test */
+    function recognising_when_not_to_ignore_a_row()
+    {
+        $to = To::the('foo', Identified::by('name'));
+        $this->assertFalse($to->ignoreThe(['name' => 'bar']));
+    }
 }
