@@ -20,7 +20,7 @@ final class Money implements Monetary
 
     public function amount(): string
     {
-        return divide($this->amount, 100, 2);
+        return divide((string) $this->amount, '100', 2);
     }
 
     public function cents(): int
