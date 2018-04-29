@@ -26,8 +26,44 @@ class Objects_get_extracted_from_the_input_data extends TestCase
         $tableData = [
             ['thing_id' => 1, 'thing_name' => 'Foo'],
             ['thing_id' => 2, 'thing_name' => 'Bar'],
-            ['thing_id' => 2, 'thing_name' => 'Ignore this one'],
+            ['thing_id' => 2, 'thing_name' => 'Ignore this data'],
             ['thing_id' => 3, 'thing_name' => 'Baz'],
+        ];
+
+        $objects = Objects::producedByThis(
+            SimpleHydrator::forThe(Thing::class),
+            Prefixed::with('thing'),
+            Identified::by('id')
+        );
+        $resulting = $objects->from($tableData, IdentityMap::startEmpty());
+
+        $this->assertArrayHasKey('thing', $resulting);
+
+        /** @var iterable|Thing[] $things */
+        $things = $resulting['thing'];
+
+        $this->assertCount(3, $things);
+
+        $this->assertSame('Foo', $things['1']->name());
+        $this->assertSame('Bar', $things['2']->name());
+        $this->assertSame('Baz', $things['3']->name());
+
+        $this->assertSame(1, $things['1']->id());
+        $this->assertSame(2, $things['2']->id());
+        $this->assertSame(3, $things['3']->id());
+    }
+
+    /** @test */
+    function ignoring_null_values()
+    {
+        $tableData = [
+            ['thing_id' => 1, 'thing_name' => 'Foo'],
+            ['thing_id' => null, 'thing_name' => null],
+            ['thing_id' => 2, 'thing_name' => 'Bar'],
+            ['thing_id' => null, 'thing_name' => 'Irrelevant'],
+            ['thing_id' => null, 'thing_name' => 'Ignored'],
+            ['thing_id' => 3, 'thing_name' => 'Baz'],
+            ['thing_id' => null, 'thing_name' => 'Futile'],
         ];
 
         $objects = Objects::producedByThis(
