@@ -32,7 +32,7 @@ final class HasOne implements MakesConnections
     public function load(
         KnowsWhereToLook $from,
         array $data,
-        KnowsWhereToLook $to,
+        KnowsWhereToLookTo $to,
         ContainsResultingObjects $objects
     ): array {
         // @todo add caching?

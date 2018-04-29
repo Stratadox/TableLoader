@@ -42,11 +42,14 @@ final class HasMany implements MakesConnections
     public function load(
         KnowsWhereToLook $from,
         array $data,
-        KnowsWhereToLook $to,
+        KnowsWhereToLookTo $to,
         ContainsResultingObjects $objects
     ): array {
         $related = [];
         foreach ($data as $row) {
+            if ($to->ignoreThe($row)) {
+                continue;
+            }
             $object = $objects[$to->label()][$to->this($row)];
             if ($this->shouldAdd($object, $from->this($row), $related)) {
                 $related[$from->this($row)][] = $object;

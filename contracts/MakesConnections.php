@@ -24,7 +24,7 @@ interface MakesConnections
     public function load(
         KnowsWhereToLook $from,
         array $data,
-        KnowsWhereToLook $to,
+        KnowsWhereToLookTo $to,
         Result $objects
     ): array;
 }
