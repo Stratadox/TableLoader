@@ -153,8 +153,8 @@ class HasMany_collects_related_objects extends TestCase
 
         $data = [
             ['basket_name' => 'letters', 'thing_id' => 1, 'thing_name' => 'A'],
-            ['basket_name' => 'letters', 'thing_id' => 2, 'thing_name' => 'B'],
             ['basket_name' => 'empty', 'thing_id' => null, 'thing_name' => null],
+            ['basket_name' => 'letters', 'thing_id' => 2, 'thing_name' => 'B'],
         ];
 
         $objects = Result::fromArray([
