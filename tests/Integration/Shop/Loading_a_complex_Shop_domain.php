@@ -13,26 +13,26 @@ use Stratadox\TableLoader\InCase;
 use Stratadox\TableLoader\Joined;
 use Stratadox\TableLoader\Load;
 use Stratadox\TableLoader\LoadsTables;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Admin;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Customer;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Feature;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\NumberValue;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Money;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\NumberAttribute;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Opinion;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Prices;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Product;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Rating;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\ReasonsToBuy;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Infrastructure\ReviewsLoaderFactory;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Infrastructure\ReviewsProxy;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Review;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Service;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\TextAttribute;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\TextListAttribute;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\TextValue;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\User;
-use Stratadox\TableLoader\Test\Integration\Shop\Fixture\Username;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\Admin;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\Customer;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\Feature;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\NumberValue;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Price\Money;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\NumberAttribute;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Review\Opinion;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Price\Prices;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Product;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Review\Rating;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\ReasonsToBuy;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Review\Review;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Service;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\TextAttribute;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\TextListAttribute;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\TextValue;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\User;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\Username;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Infrastructure\ReviewsLoaderFactory;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Infrastructure\ReviewsProxy;
 use Stratadox\TableLoader\Test\Helper\TableTransforming;
 
 /**
@@ -121,26 +121,26 @@ class Loading_a_complex_Shop_domain extends TestCase
     private function checkDeliveryPrices(Service $sameDayDelivery, Service $fourDayDelivery): void
     {
         $this->assertEquals(new Money(450, 'USD'), $sameDayDelivery->priceIn('USD'));
-        $this->assertEquals(new Money(375, 'EUR'), $sameDayDelivery->priceIn('EUR'));
-        $this->assertEquals(new Money(250, 'USD'), $fourDayDelivery->priceIn('USD'));
-        $this->assertEquals(new Money(175, 'EUR'), $fourDayDelivery->priceIn('EUR'));
-
         $this->assertEquals('USD 4.50', $sameDayDelivery->priceIn('USD'));
+        $this->assertEquals(new Money(375, 'EUR'), $sameDayDelivery->priceIn('EUR'));
         $this->assertEquals('EUR 3.75', $sameDayDelivery->priceIn('EUR'));
+
+        $this->assertEquals(new Money(250, 'USD'), $fourDayDelivery->priceIn('USD'));
         $this->assertEquals('USD 2.50', $fourDayDelivery->priceIn('USD'));
+        $this->assertEquals(new Money(175, 'EUR'), $fourDayDelivery->priceIn('EUR'));
         $this->assertEquals('EUR 1.75', $fourDayDelivery->priceIn('EUR'));
     }
 
     private function checkProductPrices(Product $tvSet1, Product $tvSet2): void
     {
         $this->assertEquals(new Money(36999, 'USD'), $tvSet1->priceIn('USD'));
-        $this->assertEquals(new Money(34999, 'EUR'), $tvSet1->priceIn('EUR'));
-        $this->assertEquals(new Money(26999, 'USD'), $tvSet2->priceIn('USD'));
-        $this->assertEquals(new Money(25499, 'EUR'), $tvSet2->priceIn('EUR'));
-
         $this->assertEquals('USD 369.99', $tvSet1->priceIn('USD'));
+        $this->assertEquals(new Money(34999, 'EUR'), $tvSet1->priceIn('EUR'));
         $this->assertEquals('EUR 349.99', $tvSet1->priceIn('EUR'));
+
+        $this->assertEquals(new Money(26999, 'USD'), $tvSet2->priceIn('USD'));
         $this->assertEquals('USD 269.99', $tvSet2->priceIn('USD'));
+        $this->assertEquals(new Money(25499, 'EUR'), $tvSet2->priceIn('EUR'));
         $this->assertEquals('EUR 254.99', $tvSet2->priceIn('EUR'));
     }
 
