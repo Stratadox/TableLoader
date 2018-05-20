@@ -30,8 +30,5 @@ abstract class Attribute implements ReasonToBuy
         return $this->name;
     }
 
-    public function value()
-    {
-        return $this->value;
-    }
+    abstract public function value();
 }
