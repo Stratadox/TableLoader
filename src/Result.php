@@ -10,6 +10,11 @@ use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\IdentityMap\MapsObjectsByIdentity;
 use Traversable;
 
+/**
+ * Result.
+ *
+ * @author Stratadox
+ */
 final class Result implements ContainsResultingObjects
 {
     private $objects;
@@ -92,7 +97,7 @@ final class Result implements ContainsResultingObjects
      * @param object[][] $with
      * @return array
      */
-    private function merge(iterable $result, iterable $with): array
+    private function merge(array $result, iterable $with): array
     {
         foreach ($with as $label => $objects) {
             foreach ($objects as $id => $object) {

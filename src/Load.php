@@ -172,8 +172,8 @@ final class Load implements DefinesSingleClassMapping
     /**
      * Checks that the columns that identify the label are known.
      *
-     * @param string $label      The label we need to identify.
-     * @throws CannotMakeMapping When the label cannot be identified.
+     * @param string $label           The label we need to identify.
+     * @throws CannotMakeTableMapping When the label cannot be identified.
      */
     private function mustKnowTheIdentityColumnsFor(string $label): void
     {
