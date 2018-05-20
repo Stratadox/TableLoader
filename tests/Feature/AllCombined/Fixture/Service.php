@@ -7,9 +7,13 @@ final class Service extends Sellable
 {
     private $description;
 
-    public function __construct(string $name, string $description, Prices $prices)
-    {
-        parent::__construct($name, $prices);
+    public function __construct(
+        string $name,
+        string $description,
+        Prices $prices,
+        Reviews $reviews
+    ) {
+        parent::__construct($name, $prices, $reviews);
         $this->description = $description;
     }
 

@@ -10,9 +10,10 @@ final class Product extends Sellable
     public function __construct(
         string $name,
         Prices $prices,
+        Reviews $reviews,
         ReasonsToBuy $reasonsToBuy
     ) {
-        parent::__construct($name, $prices);
+        parent::__construct($name, $prices, $reviews);
         $this->reasonsToBuy = $reasonsToBuy;
     }
 

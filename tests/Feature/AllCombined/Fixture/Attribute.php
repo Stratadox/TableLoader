@@ -10,7 +10,7 @@ abstract class Attribute implements ReasonToBuy
     protected $name;
     protected $value;
 
-    public function __construct(string $name, $value)
+    public function __construct(string $name, ReasonToBuy $value)
     {
         $this->name = $name;
         $this->value = $value;
@@ -23,5 +23,15 @@ abstract class Attribute implements ReasonToBuy
             $this->name,
             $this->value
         );
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function value()
+    {
+        return $this->value;
     }
 }

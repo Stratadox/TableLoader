@@ -9,11 +9,13 @@ abstract class Sellable
 {
     protected $name;
     protected $prices;
+    protected $reviews;
 
-    public function __construct(string $name, Prices $prices)
+    public function __construct(string $name, Prices $prices, Reviews $reviews)
     {
         $this->name = $name;
         $this->prices = $prices;
+        $this->reviews = $reviews;
     }
 
     /**
@@ -24,6 +26,16 @@ abstract class Sellable
     public function name(): string
     {
         return $this->name;
+    }
+
+    /**
+     * Retrieves the reviews.
+     *
+     * @return Reviews
+     */
+    public function reviews(): Reviews
+    {
+        return $this->reviews;
     }
 
     /**
