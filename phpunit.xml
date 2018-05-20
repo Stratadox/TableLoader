@@ -9,6 +9,9 @@
         <testsuite name="Feature">
             <directory suffix=".php">tests/Feature</directory>
         </testsuite>
+        <testsuite name="Integration">
+            <directory suffix=".php">tests/Integration</directory>
+        </testsuite>
         <testsuite name="Unit">
             <directory suffix=".php">tests/Unit</directory>
         </testsuite>
@@ -22,7 +25,7 @@
 
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml" />
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true" />
+        <log type="coverage-text" target="php://stdout" />
     </logging>
 
     <php>
