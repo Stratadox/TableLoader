@@ -3,39 +3,20 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader\Test\Integration\Shop;
 
-use const PHP_EOL;
+use function assert;
 use PHPUnit\Framework\TestCase;
-use Stratadox\Hydration\Mapper\Instruction\Has;
-use Stratadox\Hydration\Mapper\Instruction\In;
-use Stratadox\Hydration\Mapper\Instruction\Is;
-use Stratadox\IdentityMap\Ignore;
 use Stratadox\TableLoader\ContainsResultingObjects;
-use Stratadox\TableLoader\Decide;
-use Stratadox\TableLoader\InCase;
-use Stratadox\TableLoader\Joined;
-use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTables;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\Admin;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\Customer;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\Feature;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\NumberValue;
+use Stratadox\TableLoader\Test\Helper\TableTransforming;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Price\Money;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\NumberAttribute;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Review\Opinion;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Price\Prices;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Product;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Review\Rating;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\ReasonsToBuy;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Review\Review;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Service;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\Feature;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\NumberAttribute;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\TextAttribute;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\TextListAttribute;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\TextValue;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Service;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\User;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\Username;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Infrastructure\ReviewsLoaderFactory;
-use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Infrastructure\ReviewsProxy;
-use Stratadox\TableLoader\Test\Helper\TableTransforming;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Infrastructure\MappedLoader;
+use const PHP_EOL;
 
 /**
  * @coversNothing
@@ -47,6 +28,7 @@ class Loading_a_complex_Shop_domain extends TestCase
     /** @test */
     function loading_products_and_services_with_their_prices_features_and_attributes_eagerly_while_lazily_loading_reviews()
     {
+        // @todo Actually load this from a sqlite db?
         $data = $this->table([
 //--------+-----------+-----------+-------------------+-----------+--------------+-----------+-------------+-------------+------------+---------------+,
 ['item_id','item_type','item_name','item_text'        ,'price_iso','price_amount','reason_id','reason_type','reason_name','reason_int','reason_x_text'],
@@ -92,32 +74,23 @@ class Loading_a_complex_Shop_domain extends TestCase
                     [ 3         , 3             ,'Not so bad.'   ,'Not so bad.'       , 2       ,'customer' ,'Bob'      , null           ],
                     [ 5         , 5             ,'Great colours' ,'Great colours!! :)', 1       ,'customer' ,'Alice'    , null           ],
                 ]),
+                '2' => $this->table([
+                    ['review_id','review_rating','review_summary','review_full_text'  ,'user_id','user_type','user_name','user_last_name'],
+                ]),
             ],
         ];
 
-        /**
-         * @var LoadsTables          $make
-         * @var ReviewsLoaderFactory $reviewLoader
-         */
-        [$make, $reviewLoader] = $this->tableLoader($reviewData);
+        $result = MappedLoader::withReviewData($reviewData)->from($data);
 
-        $map = Ignore::these(
-            Money::class,
-            Feature::class,
-            NumberAttribute::class,
-            TextAttribute::class,
-            TextListAttribute::class
-        );
+        $sameDayDelivery = $result->get(Service::class, '1');
+        $fourDayDelivery = $result->get(Service::class, '2');
+        $tvSet1 = $result->get(Product::class, '1');
+        $tvSet2 = $result->get(Product::class, '2');
 
-        $result = $make->from($data, $map);
-
-        $reviewLoader->setIdentityMap($result->identityMap());
-        $catalogue = $result['item'];
-
-        $sameDayDelivery = $catalogue['service:1'];
-        $fourDayDelivery = $catalogue['service:2'];
-        $tvSet1 = $catalogue['product:1'];
-        $tvSet2 = $catalogue['product:2'];
+        assert($sameDayDelivery instanceof Service);
+        assert($fourDayDelivery instanceof Service);
+        assert($tvSet1 instanceof Product);
+        assert($tvSet2 instanceof Product);
 
         $this->checkDeliveryPrices($sameDayDelivery, $fourDayDelivery);
         $this->checkProductPrices($tvSet1, $tvSet2);
@@ -126,8 +99,6 @@ class Loading_a_complex_Shop_domain extends TestCase
         $this->checkProductReviews($tvSet1, $tvSet2, $alice, $bob);
         $this->checkIdentityMap($result);
     }
-
-    // Checks
 
     private function checkDeliveryPrices(Service $sameDayDelivery, Service $fourDayDelivery): void
     {
@@ -301,72 +272,5 @@ class Loading_a_complex_Shop_domain extends TestCase
         $this->assertFalse($result->has(Feature::class, '5'));
         $this->assertFalse($result->has(TextAttribute::class, '6'));
         $this->assertFalse($result->has(NumberAttribute::class, '7'));
-    }
-
-    // Mapping
-
-    private function tableLoader(array $reviewData): array
-    {
-        $reviewLoader = $this->reviewLoader($reviewData);
-        return [Joined::table(
-            Decide::which('item')->basedOn('type', ...[
-                InCase::of('service')
-                    ->as(Service::class, [
-                        'description' => Is::stringInKey('text')
-                    ]),
-                InCase::of('product')
-                    ->as(Product::class)
-                    ->havingMany('reasonsToBuy', 'reason', ReasonsToBuy::class)
-            ])->with([
-                'name' => Is::string(),
-                'reviews' => Has::many(Review::class)
-                    ->containedInA(ReviewsProxy::class)
-                    ->loadedBy($reviewLoader)
-            ])->havingMany('prices', 'price', Prices::class),
-
-            Load::each('price')->as(Money::class, [
-                'currency' => In::key('iso'),
-                'amount' => Is::int(),
-            ])->by('iso', 'amount'),
-
-            Decide::which('reason')->basedOn('type', ...[
-                InCase::of('feature')->as(Feature::class),
-                InCase::of('numeric')->as(NumberAttribute::class, [
-                    'value' => Has::one(NumberValue::class)->with('value', Is::intInKey('int'))
-                ]),
-                InCase::of('text')->as(TextAttribute::class, [
-                    'value' => Has::one(TextValue::class)->with('value', Is::stringInKey('x_text'))
-                ]),
-                InCase::of('text-list')->as(TextListAttribute::class)->havingMany('value', 'reason_x'),
-            ])->with(['name' => Is::string()]),
-            Load::each('reason_x')
-                ->by('text')
-                ->as(TextValue::class, ['value' => Is::stringInKey('text')])
-        )(), $reviewLoader];
-    }
-
-    private function reviewLoader(array $reviewData): ReviewsLoaderFactory
-    {
-        return ReviewsLoaderFactory::withThe(
-            Joined::table(
-                Load::each('review')
-                    ->as(Review::class, [
-                        'rating' => Has::one(Rating::class)
-                            ->with('score', Is::intInKey('rating')),
-                        'opinion' => Has::one(Opinion::class)
-                            ->with('summary')
-                            ->with('fullText', In::key('full_text'))
-                    ])
-                    ->havingOne('author', 'user'),
-                Decide::which('user')->basedOn('type', ...[
-                    InCase::of('customer')->as(Customer::class),
-                    InCase::of('admin')->as(Admin::class),
-                ])->with(['name' => Has::one(Username::class)
-                    ->with('name', Is::string())
-                    ->with('lastName', Is::stringInKey('last_name')->nullable())
-                ])
-            )(),
-            $reviewData
-        );
     }
 }
