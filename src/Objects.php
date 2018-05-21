@@ -65,25 +65,17 @@ final class Objects implements MakesObjects
             try {
                 $class = $this->hydrate->classFor($row);
                 $id = $this->identifier->forIdentityMap($row);
-                $map = $this->addToMapIfNew($class, $id, $row, $map);
-                $objects[$hash] = $map->get($class, $id);
+                if ($map->has($class, $id)) {
+                    $object = $map->get($class, $id);
+                } else {
+                    $object = $this->hydrate->fromArray($row);
+                    $map = $map->add($id, $object);
+                }
+                $objects[$hash] = $object;
             } catch (Throwable $exception) {
                 throw UnmappableRow::encountered($exception, $label, $row);
             }
         }
         return Result::fromArray([$label => $objects], $map);
-    }
-
-    /** @throws CannotHydrate|AlreadyThere */
-    private function addToMapIfNew(
-        string $class,
-        string $id,
-        array $row,
-        Map $map
-    ): Map {
-        if (!$map->has($class, $id)) {
-            $map = $map->add($id, $this->hydrate->fromArray($row));
-        }
-        return $map;
     }
 }

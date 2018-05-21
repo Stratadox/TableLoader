@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Stratadox\Hydrator\MappedHydrator;
 use Stratadox\Hydrator\SimpleHydrator;
 use Stratadox\IdentityMap\IdentityMap;
+use Stratadox\IdentityMap\Ignore;
 use Stratadox\TableLoader\CannotLoadTable;
 use Stratadox\TableLoader\Identified;
 use Stratadox\TableLoader\Objects;
@@ -122,6 +123,45 @@ class Objects_get_extracted_from_the_input_data extends TestCase
 
         $this->assertEquals($bar, $things['2']);
         $this->assertNotSame($bar, $things['2']);
+    }
+
+    /** @test */
+    function loading_objects_that_are_ignored_by_the_identity_map()
+    {
+        $tableData = [
+            ['thing_id' => 1, 'thing_name' => 'Foo'],
+            ['thing_id' => 2, 'thing_name' => 'Bar'],
+            ['thing_id' => 3, 'thing_name' => 'Baz'],
+        ];
+
+        $objects = Objects::producedByThis(
+            SimpleHydrator::forThe(Thing::class),
+            Prefixed::with('thing'),
+            Identified::by('id')
+        );
+
+        $identityMap = Ignore::the(Thing::class, IdentityMap::startEmpty());
+
+        $resulting = $objects->from($tableData, $identityMap);
+
+        $this->assertArrayHasKey('thing', $resulting);
+
+        /** @var iterable|Thing[] $things */
+        $things = $resulting['thing'];
+
+        $this->assertCount(3, $things);
+
+        $this->assertSame('Foo', $things['1']->name());
+        $this->assertSame('Bar', $things['2']->name());
+        $this->assertSame('Baz', $things['3']->name());
+
+        $this->assertSame(1, $things['1']->id());
+        $this->assertSame(2, $things['2']->id());
+        $this->assertSame(3, $things['3']->id());
+
+        $this->assertFalse($resulting->identityMap()->has(Thing::class, '1'));
+        $this->assertFalse($resulting->identityMap()->has(Thing::class, '2'));
+        $this->assertFalse($resulting->identityMap()->has(Thing::class, '3'));
     }
 
     /** @test */
