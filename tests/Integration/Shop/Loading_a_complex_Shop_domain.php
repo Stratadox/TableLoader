@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use Stratadox\Hydration\Mapper\Instruction\Has;
 use Stratadox\Hydration\Mapper\Instruction\In;
 use Stratadox\Hydration\Mapper\Instruction\Is;
+use Stratadox\IdentityMap\Ignore;
+use Stratadox\TableLoader\ContainsResultingObjects;
 use Stratadox\TableLoader\Decide;
 use Stratadox\TableLoader\InCase;
 use Stratadox\TableLoader\Joined;
@@ -55,20 +57,20 @@ class Loading_a_complex_Shop_domain extends TestCase
 [ 2       , 'service' ,'Delivery4','Four day shipping', 'EUR'     , 175          , null      , null        , null        , null       , null          ],
 [ 1       , 'product' ,'TV set 1' , null              , 'USD'     , 36999        , 1         , 'feature'   , 'Ultra HD'  , null       , null          ],
 [ 1       , 'product' ,'TV set 1' , null              , 'USD'     , 36999        , 2         , 'numeric'   , 'Diameter'  , 50         , null          ],
-[ 1       , 'product' ,'TV set 1' , null              , 'USD'     , 36999        , 2         , 'text'      , 'Display'   , null       , 'LED'         ],
-[ 1       , 'product' ,'TV set 1' , null              , 'USD'     , 36999        , 3         , 'text-list' , 'USB'       , null       , '1x USB3'     ],
-[ 1       , 'product' ,'TV set 1' , null              , 'USD'     , 36999        , 3         , 'text-list' , 'USB'       , null       , '2x USB2'     ],
+[ 1       , 'product' ,'TV set 1' , null              , 'USD'     , 36999        , 3         , 'text'      , 'Display'   , null       , 'LED'         ],
+[ 1       , 'product' ,'TV set 1' , null              , 'USD'     , 36999        , 4         , 'text-list' , 'USB'       , null       , '1x USB3'     ],
+[ 1       , 'product' ,'TV set 1' , null              , 'USD'     , 36999        , 4         , 'text-list' , 'USB'       , null       , '2x USB2'     ],
 [ 1       , 'product' ,'TV set 1' , null              , 'EUR'     , 34999        , 1         , 'feature'   , 'Ultra HD'  , null       , null          ],
 [ 1       , 'product' ,'TV set 1' , null              , 'EUR'     , 34999        , 2         , 'numeric'   , 'Diameter'  , 50         , null          ],
-[ 1       , 'product' ,'TV set 1' , null              , 'EUR'     , 34999        , 2         , 'text'      , 'Display'   , null       , 'LED'         ],
-[ 1       , 'product' ,'TV set 1' , null              , 'EUR'     , 34999        , 3         , 'text-list' , 'USB'       , null       , '1x USB3'     ],
-[ 1       , 'product' ,'TV set 1' , null              , 'EUR'     , 34999        , 3         , 'text-list' , 'USB'       , null       , '2x USB2'     ],
-[ 2       , 'product' ,'TV set 2' , null              , 'USD'     , 26999        , 4         , 'feature'   , 'Full HD'   , null       , null          ],
-[ 2       , 'product' ,'TV set 2' , null              , 'USD'     , 26999        , 5         , 'text'      , 'Display'   , null       , 'LED'         ],
-[ 2       , 'product' ,'TV set 2' , null              , 'USD'     , 26999        , 6         , 'numeric'   , 'Diameter'  , 47         , null          ],
-[ 2       , 'product' ,'TV set 2' , null              , 'EUR'     , 25499        , 4         , 'feature'   , 'Full HD'   , null       , null          ],
-[ 2       , 'product' ,'TV set 2' , null              , 'EUR'     , 25499        , 5         , 'text'      , 'Display'   , null       , 'LED'         ],
-[ 2       , 'product' ,'TV set 2' , null              , 'EUR'     , 25499        , 6         , 'numeric'   , 'Diameter'  , 47         , null          ],
+[ 1       , 'product' ,'TV set 1' , null              , 'EUR'     , 34999        , 3         , 'text'      , 'Display'   , null       , 'LED'         ],
+[ 1       , 'product' ,'TV set 1' , null              , 'EUR'     , 34999        , 4         , 'text-list' , 'USB'       , null       , '1x USB3'     ],
+[ 1       , 'product' ,'TV set 1' , null              , 'EUR'     , 34999        , 4         , 'text-list' , 'USB'       , null       , '2x USB2'     ],
+[ 2       , 'product' ,'TV set 2' , null              , 'USD'     , 26999        , 5         , 'feature'   , 'Full HD'   , null       , null          ],
+[ 2       , 'product' ,'TV set 2' , null              , 'USD'     , 26999        , 6         , 'text'      , 'Display'   , null       , 'LED'         ],
+[ 2       , 'product' ,'TV set 2' , null              , 'USD'     , 26999        , 7         , 'numeric'   , 'Diameter'  , 47         , null          ],
+[ 2       , 'product' ,'TV set 2' , null              , 'EUR'     , 25499        , 5         , 'feature'   , 'Full HD'   , null       , null          ],
+[ 2       , 'product' ,'TV set 2' , null              , 'EUR'     , 25499        , 6         , 'text'      , 'Display'   , null       , 'LED'         ],
+[ 2       , 'product' ,'TV set 2' , null              , 'EUR'     , 25499        , 7         , 'numeric'   , 'Diameter'  , 47         , null          ],
 //--------+-----------+-----------+-------------------+-----------+--------------+-----------+-------------+-------------+------------+---------------+,
         ]);
 
@@ -99,7 +101,15 @@ class Loading_a_complex_Shop_domain extends TestCase
          */
         [$make, $reviewLoader] = $this->tableLoader($reviewData);
 
-        $result = $make->from($data);
+        $map = Ignore::these(
+            Money::class,
+            Feature::class,
+            NumberAttribute::class,
+            TextAttribute::class,
+            TextListAttribute::class
+        );
+
+        $result = $make->from($data, $map);
 
         $reviewLoader->setIdentityMap($result->identityMap());
         $catalogue = $result['item'];
@@ -114,6 +124,7 @@ class Loading_a_complex_Shop_domain extends TestCase
         $this->checkReasonsToBuy($tvSet1, $tvSet2);
         [$alice, $bob] = $this->checkDeliveryReviews($sameDayDelivery, $fourDayDelivery);
         $this->checkProductReviews($tvSet1, $tvSet2, $alice, $bob);
+        $this->checkIdentityMap($result);
     }
 
     // Checks
@@ -269,6 +280,27 @@ class Loading_a_complex_Shop_domain extends TestCase
         $this->assertSame($alice, $tvSet1->reviews()[1]->author());
 
         $this->assertEmpty($tvSet2->reviews());
+    }
+
+    private function checkIdentityMap(ContainsResultingObjects $result): void
+    {
+        $this->assertTrue($result->has(Product::class, '1'));
+        $this->assertTrue($result->has(Product::class, '2'));
+        $this->assertFalse($result->has(Product::class, '3'));
+
+        $this->assertTrue($result->has(Service::class, '1'));
+        $this->assertTrue($result->has(Service::class, '2'));
+        $this->assertFalse($result->has(Service::class, '3'));
+
+        // Ignored "identities"
+        $this->assertFalse($result->has(Money::class, 'USD:450'));
+        $this->assertFalse($result->has(Feature::class, '1'));
+        $this->assertFalse($result->has(NumberAttribute::class, '2'));
+        $this->assertFalse($result->has(TextAttribute::class, '3'));
+        $this->assertFalse($result->has(TextListAttribute::class, '4'));
+        $this->assertFalse($result->has(Feature::class, '5'));
+        $this->assertFalse($result->has(TextAttribute::class, '6'));
+        $this->assertFalse($result->has(NumberAttribute::class, '7'));
     }
 
     // Mapping
