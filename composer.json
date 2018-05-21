@@ -22,7 +22,7 @@
         "stratadox/instantiator": "^0.1.0",
         "stratadox/immutable-collection": "^1.1",
         "stratadox/hydration-mapper": "^2.4",
-        "stratadox/identity-map": "^0.4.1"
+        "stratadox/identity-map": "^0.5"
     },
     "require-dev": {
         "php-coveralls/php-coveralls": "^2.0",

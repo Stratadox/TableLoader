@@ -8,10 +8,12 @@ use Stratadox\Hydrator\MappedHydrator;
 use Stratadox\Hydrator\SimpleHydrator;
 use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\IdentityMap\Ignore;
+use Stratadox\IdentityMap\Whitelist;
 use Stratadox\TableLoader\CannotLoadTable;
 use Stratadox\TableLoader\Identified;
 use Stratadox\TableLoader\Objects;
 use Stratadox\TableLoader\Prefixed;
+use Stratadox\TableLoader\Test\Unit\Fixture\Banana;
 use Stratadox\TableLoader\Test\Unit\Fixture\Exceptional;
 use Stratadox\TableLoader\Test\Unit\Fixture\Thing;
 
@@ -140,7 +142,7 @@ class Objects_get_extracted_from_the_input_data extends TestCase
             Identified::by('id')
         );
 
-        $identityMap = Ignore::the(Thing::class, IdentityMap::startEmpty());
+        $identityMap = Whitelist::the(Banana::class);
 
         $resulting = $objects->from($tableData, $identityMap);
 
