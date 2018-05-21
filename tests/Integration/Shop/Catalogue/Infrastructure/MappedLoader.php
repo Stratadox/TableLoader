@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Infrastructure;
 
+use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\IdentityMap\MapsObjectsByIdentity as Map;
 use Stratadox\IdentityMap\Whitelist;
 use Stratadox\TableLoader\ContainsResultingObjects as ResultingObjects;
@@ -37,7 +38,8 @@ final class MappedLoader implements LoadsTables
          */
         [$make, $reviewLoader] = $this->tableLoader($this->reviewData);
 
-        $map = Whitelist::the(
+        $map = Whitelist::forThe(
+            $identityMap ?: IdentityMap::startEmpty(),
             Product::class,
             Service::class,
             Customer::class,

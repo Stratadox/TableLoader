@@ -5,6 +5,7 @@ namespace Stratadox\TableLoader\Test\Integration\Shop;
 
 use function assert;
 use PHPUnit\Framework\TestCase;
+use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\TableLoader\ContainsResultingObjects;
 use Stratadox\TableLoader\Test\Helper\TableTransforming;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Price\Money;
@@ -14,7 +15,9 @@ use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\NumberAt
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\TextAttribute;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Reason\TextListAttribute;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Service;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\Customer;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\User;
+use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\User\Username;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Infrastructure\MappedLoader;
 use const PHP_EOL;
 
@@ -24,6 +27,18 @@ use const PHP_EOL;
 class Loading_a_complex_Shop_domain extends TestCase
 {
     use TableTransforming;
+
+    private $alice;
+    private $map;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->alice = new Customer(new Username('Alice'));
+        $this->map = IdentityMap::with([
+            '1' => $this->alice,
+        ]);
+    }
 
     /** @test */
     function loading_products_and_services_with_their_prices_features_and_attributes_eagerly_while_lazily_loading_reviews()
@@ -80,7 +95,7 @@ class Loading_a_complex_Shop_domain extends TestCase
             ],
         ];
 
-        $result = MappedLoader::withReviewData($reviewData)->from($data);
+        $result = MappedLoader::withReviewData($reviewData)->from($data, $this->map);
 
         $sameDayDelivery = $result->get(Service::class, '1');
         $fourDayDelivery = $result->get(Service::class, '2');
@@ -197,11 +212,7 @@ class Loading_a_complex_Shop_domain extends TestCase
         $this->assertSame('Got here fine', $fourDayDelivery->reviews()[0]->opinion()->summary());
         $this->assertSame('Got here fine! :)', $fourDayDelivery->reviews()[0]->opinion()->fullText());
 
-        $alice = $fourDayDelivery->reviews()[0]->author();
-        $this->assertEquals('Alice', $alice);
-        $this->assertEquals('Alice', $alice->name());
-        $this->assertEquals('Alice', $alice->name()->firstName());
-        $this->assertNull($alice->name()->lastName());
+        $this->assertSame($this->alice, $fourDayDelivery->reviews()[0]->author());
 
         // Bobs review of Same Day delivery
 
@@ -230,7 +241,7 @@ class Loading_a_complex_Shop_domain extends TestCase
         $this->assertEquals('Charlie', $charlie->name()->firstName());
         $this->assertEquals('Chaplin', $charlie->name()->lastName());
 
-        return [$alice, $bob, $charlie];
+        return [$this->alice, $bob, $charlie];
     }
 
     private function checkProductReviews(
