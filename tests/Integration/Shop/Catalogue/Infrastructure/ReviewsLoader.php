@@ -8,7 +8,7 @@ use function get_class;
 use Stratadox\IdentityMap\IdentityMap;
 use Stratadox\IdentityMap\MapsObjectsByIdentity;
 use Stratadox\Proxy\Loader;
-use Stratadox\TableLoader\LoadsTables;
+use Stratadox\TableLoader\Loader\LoadsTables;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Review\Reviews;
 
 final class ReviewsLoader extends Loader

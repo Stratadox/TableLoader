@@ -5,9 +5,9 @@ namespace Stratadox\TableLoader\Test\Feature\ManyToMany;
 
 use function assert;
 use PHPUnit\Framework\TestCase;
-use Stratadox\TableLoader\Joined;
-use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTables;
+use Stratadox\TableLoader\Builder\Joined;
+use Stratadox\TableLoader\Builder\Load;
+use Stratadox\TableLoader\Loader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\ManyToMany\Fixture\Course;
 use Stratadox\TableLoader\Test\Feature\ManyToMany\Fixture\Courses;
 use Stratadox\TableLoader\Test\Feature\ManyToMany\Fixture\Student;

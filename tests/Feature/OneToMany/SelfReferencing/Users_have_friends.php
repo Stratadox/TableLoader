@@ -6,9 +6,9 @@ namespace Stratadox\TableLoader\Test\Feature\OneToMany\SelfReferencing;
 use function assert;
 use PHPUnit\Framework\TestCase;
 use Stratadox\Hydration\Mapper\Instruction\Is;
-use Stratadox\TableLoader\Joined;
-use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTables;
+use Stratadox\TableLoader\Builder\Joined;
+use Stratadox\TableLoader\Builder\Load;
+use Stratadox\TableLoader\Loader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\OneToMany\SelfReferencing\Fixture\User;
 use Stratadox\TableLoader\Test\Helper\TableTransforming;
 

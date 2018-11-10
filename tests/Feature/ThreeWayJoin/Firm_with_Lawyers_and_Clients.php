@@ -5,9 +5,9 @@ namespace Stratadox\TableLoader\Test\Feature\ThreeWayJoin;
 
 use function assert;
 use PHPUnit\Framework\TestCase;
-use Stratadox\TableLoader\Joined;
-use Stratadox\TableLoader\Load;
-use Stratadox\TableLoader\LoadsTables;
+use Stratadox\TableLoader\Builder\Joined;
+use Stratadox\TableLoader\Builder\Load;
+use Stratadox\TableLoader\Loader\LoadsTables;
 use Stratadox\TableLoader\Test\Feature\ThreeWayJoin\Fixture\Client;
 use Stratadox\TableLoader\Test\Feature\ThreeWayJoin\Fixture\Firm;
 use Stratadox\TableLoader\Test\Feature\ThreeWayJoin\Fixture\Lawyer;

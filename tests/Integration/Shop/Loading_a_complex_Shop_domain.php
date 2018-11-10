@@ -6,7 +6,7 @@ namespace Stratadox\TableLoader\Test\Integration\Shop;
 use function assert;
 use PHPUnit\Framework\TestCase;
 use Stratadox\IdentityMap\IdentityMap;
-use Stratadox\TableLoader\ContainsResultingObjects;
+use Stratadox\TableLoader\Loader\ContainsResultingObjects;
 use Stratadox\TableLoader\Test\Helper\TableTransforming;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Price\Money;
 use Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Domain\Product;

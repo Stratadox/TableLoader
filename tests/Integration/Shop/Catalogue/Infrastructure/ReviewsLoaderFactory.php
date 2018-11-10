@@ -6,7 +6,7 @@ namespace Stratadox\TableLoader\Test\Integration\Shop\Catalogue\Infrastructure;
 use Stratadox\IdentityMap\MapsObjectsByIdentity;
 use Stratadox\Proxy\LoadsProxiedObjects;
 use Stratadox\Proxy\ProducesProxyLoaders;
-use Stratadox\TableLoader\LoadsTables;
+use Stratadox\TableLoader\Loader\LoadsTables;
 
 final class ReviewsLoaderFactory implements ProducesProxyLoaders
 {
