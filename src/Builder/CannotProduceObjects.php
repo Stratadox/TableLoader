@@ -8,12 +8,20 @@ use Throwable;
 use UnexpectedValueException as UnexpectedValue;
 
 /**
- * Notifies the client code that producing the objects was unsuccessful.
+ * Notifies the client code that producing an object loader was unsuccessful.
  *
  * @author Stratadox
  */
 final class CannotProduceObjects extends UnexpectedValue implements CannotMakeTableMapping
 {
+    /**
+     * Produces an exception for when when an exception was encountered while
+     * trying to assemble the infrastructure that loads the objects.
+     *
+     * @param Throwable $exception
+     * @param string    $label
+     * @return CannotMakeTableMapping
+     */
     public static function encountered(
         Throwable $exception,
         string $label

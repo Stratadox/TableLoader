@@ -10,6 +10,11 @@ use Throwable;
 /**
  * Makes partially hydrated objects from an input array.
  *
+ * This class makes the objects and fills them with the data from the table.
+ * Note that the relations are omitted at this point, these are to be loaded
+ * later on in the process, by wiring together the related objects.
+ * @see WiresObjects
+ *
  * @author Stratadox
  */
 final class Objects implements MakesObjects

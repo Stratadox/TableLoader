@@ -26,10 +26,16 @@ use Stratadox\TableLoader\Loader\Wire;
 use Stratadox\TableLoader\Loader\Wired;
 use Stratadox\TableLoader\Loader\WiresObjects;
 
+/**
+ * Builds the required infrastructure to load objects that use inheritance.
+ * @see InCase
+ *
+ * @author Stratadox
+ */
 final class Decide implements DefinesMultipleClassMapping
 {
     private $label;
-    private $ownId;
+    private $ownId = ['id'];
     private $identityColumnsFor;
     private $decisionKey;
     /** @var LoadsWhenTriggered[] */
@@ -40,10 +46,15 @@ final class Decide implements DefinesMultipleClassMapping
     private function __construct(string $label)
     {
         $this->label = $label;
-        $this->ownId = ['id'];
         $this->identityColumnsFor[$label] = [$label . '_type', $label . '_id'];
     }
 
+    /**
+     * Makes a new builder for inheritance structure
+     *
+     * @param string $label
+     * @return DefinesMultipleClassMapping
+     */
     public static function which(string $label): DefinesMultipleClassMapping
     {
         return new self($label);
@@ -195,8 +206,11 @@ final class Decide implements DefinesMultipleClassMapping
      * @param MakesConnections[] $relations
      * @return WiresObjects[]
      */
-    private function ownWiring(string $ownLabel, array $identityFor, array $relations): array
-    {
+    private function ownWiring(
+        string $ownLabel,
+        array $identityFor,
+        array $relations
+    ): array {
         $ownId = $identityFor[$ownLabel];
         $wires = [];
         foreach ($relations as $otherLabel => $connectThem) {
@@ -216,8 +230,10 @@ final class Decide implements DefinesMultipleClassMapping
      * @param string[][]           $identityColumns
      * @return LoadsWhenTriggered[]
      */
-    private function prepareChoices(array $originalChoices, array $identityColumns): array
-    {
+    private function prepareChoices(
+        array $originalChoices,
+        array $identityColumns
+    ): array {
         $choices = [];
         foreach ($originalChoices as $choice) {
             foreach ($identityColumns as $label => $columns) {

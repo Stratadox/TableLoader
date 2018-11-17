@@ -23,10 +23,15 @@ use Stratadox\TableLoader\Loader\Wire;
 use Stratadox\TableLoader\Loader\Wired;
 use Stratadox\TableLoader\Loader\WiresObjects;
 
+/**
+ * Builds the required infrastructure to load objects that have no parents.
+ *
+ * @author Stratadox
+ */
 final class Load implements DefinesSingleClassMapping
 {
     private $label;
-    private $ownId;
+    private $ownId = ['id'];
     private $identityColumnsFor = [];
     private $class;
     private $properties = [];
@@ -35,10 +40,15 @@ final class Load implements DefinesSingleClassMapping
     private function __construct(string $label)
     {
         $this->label = $label;
-        $this->ownId = ['id'];
         $this->identityColumnsFor[$label] = [$label . '_id'];
     }
 
+    /**
+     * Makes a new builder to load each of the entities that have this label.
+     *
+     * @param string $label
+     * @return DefinesSingleClassMapping
+     */
     public static function each(string $label): DefinesSingleClassMapping
     {
         return new self($label);
@@ -99,11 +109,13 @@ final class Load implements DefinesSingleClassMapping
         return $new;
     }
 
+    /** @inheritdoc */
     public function label(): string
     {
         return $this->label;
     }
 
+    /** @inheritdoc */
     public function identityColumns(): array
     {
         return $this->identityColumnsFor[$this->label];

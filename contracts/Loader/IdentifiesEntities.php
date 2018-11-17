@@ -12,14 +12,30 @@ interface IdentifiesEntities
     /**
      * Defines additional identification fields for during the loading process.
      *
+     * This is mainly used to be able to add the decision key as identifier in
+     * the loading process, without having to use it as identifier in the
+     * identity map.
+     * The slight discrepancy between the identifiers is due to a different way
+     * of indexing: when loading, objects are grouped by their label; this can
+     * potentially contain an inheritance structure, in which case several
+     * concrete classes share a label. In the identity map, object references
+     * are stored based on their concrete class.
+     * Since identifiers only need to be unique on a per-class level, it is
+     * possible for two different objects with the same label to have the same
+     * identifier in the identity map. In order to make them identifiable in the
+     * result set, the decision key and value are also used as identifier when
+     * assembling the result.
+     *
      * @param string ...$columns
      * @return IdentifiesEntities
      */
     public function andForLoading(string ...$columns): IdentifiesEntities;
 
     /**
-     * Retrieves a string representation that can identify the entity during the
-     * loading process.
+     * Retrieves a string that identifies the entity during the loading process.
+     *
+     * This is used to produce a unique identifier for the row, which serves as
+     * index for the object that was loaded from this row.
      *
      * @param array $row            The data to identify.
      * @return string               A string representation of the identifier.
@@ -28,8 +44,7 @@ interface IdentifiesEntities
     public function forLoading(array $row): string;
 
     /**
-     * Retrieves a string representation that can identify the entity for in the
-     * identity map.
+     * Retrieves a string that identifies the entity for in the identity map.
      *
      * @param array $row            The data to identify.
      * @return string               A string representation of the identifier.

@@ -12,15 +12,6 @@ use Stratadox\HydrationMapper\InstructsHowToMap;
 interface DefinesSingleClassMapping extends DefinesObjectMapping
 {
     /**
-     * Define which columns to use in identifying this entity.
-     *
-     * @param string ...$columns The columns to use in the identification of
-     *                           the entity.
-     * @return self|static       The single class mapping definition.
-     */
-    public function by(string ...$columns): DefinesSingleClassMapping;
-
-    /**
      * Defines what kind of object to map to.
      *
      * @param string              $class      The class to map to.

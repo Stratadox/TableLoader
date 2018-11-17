@@ -9,6 +9,10 @@ use Stratadox\ImmutableCollection\ImmutableCollection;
 /**
  * Makes partially hydrated objects from an input array.
  *
+ * This class is a composition of zero or more implementations of its own
+ * interface. It Makes Objects by delegating the work to each of its
+ * subcontractors, merging their work into one final result.
+ *
  * @author Stratadox
  */
 final class Extract extends ImmutableCollection implements MakesObjects

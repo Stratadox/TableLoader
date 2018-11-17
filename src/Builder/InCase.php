@@ -20,6 +20,12 @@ use Stratadox\TableLoader\Loader\To;
 use Stratadox\TableLoader\Loader\Wire;
 use Stratadox\TableLoader\Loader\Wired;
 
+/**
+ * Builds the required infrastructure to produce a particular subclass.
+ * @see Decide
+ *
+ * @author Stratadox
+ */
 final class InCase implements LoadsWhenTriggered
 {
     private $trigger;

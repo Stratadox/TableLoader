@@ -63,7 +63,13 @@ interface DefinesObjectMapping
     /**
      * Returns the label of the entity.
      *
+     * The label is used as prefix for the columns in joined tables, and as
+     * offset in the result map.
+     * Labels are also used to find the identity columns to use when loading the
+     * relationships of the objects.
+     *
      * @return string The label.
+     * @see ContainsResultingObjects
      */
     public function label(): string;
 

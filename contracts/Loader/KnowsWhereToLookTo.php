@@ -10,7 +10,11 @@ namespace Stratadox\TableLoader\Loader;
 interface KnowsWhereToLookTo extends KnowsWhereToLook
 {
     /**
-     * Checks whether we should ignore this row.
+     * Checks whether we should ignore this row while loading the relationship.
+     *
+     * Mainly used to determine if the particular relationship was omitted from
+     * the result set, for instance when a joined result contains only null
+     * values for the particular joined table.
      *
      * @param array $row The data that might need ignoring.
      * @return bool      Whether we should ignore this row.

@@ -72,7 +72,7 @@ interface LoadsWhenTriggered
     public function identifying(string $label, string ...$columns): self;
 
     /**
-     * Defines the label for the
+     * Defines the label for the trigger.
      *
      * @param string $label
      * @return self|static  The decision mapping definition.

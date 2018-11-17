@@ -9,6 +9,12 @@ use Stratadox\TableLoader\Loader\JoinedTable;
 use Stratadox\TableLoader\Loader\LoadsTables;
 use Stratadox\TableLoader\Loader\Wired;
 
+/**
+ * Builder for JoinedTable converters.
+ * @see JoinedTable
+ *
+ * @author Stratadox
+ */
 final class Joined extends ImmutableCollection implements MakesTableLoader
 {
     public function __construct(DefinesObjectMapping ...$objectMappings)
