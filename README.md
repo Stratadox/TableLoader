@@ -275,4 +275,5 @@ assert(2 == count($charlie->clients()));
 - Make simple table builder.
 - Segregate builder interfaces.
 - Allow direct hydrator injection in joined table builder?
-- More unhappy path testing.
+- More unhappy path testing and better exception handling.
+- Use deserializer instead of an old hydrator version.

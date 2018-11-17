@@ -48,11 +48,30 @@ class Result_contains_labeled_objects extends TestCase
                 '1' => $thing,
             ]
         ], IdentityMap::with([
-            '1' => $thing
+            '1' => $thing,
         ]));
 
         $this->assertTrue($result->has(Thing::class, '1'));
         $this->assertFalse($result->has(Thing::class, '2'));
+    }
+
+    /** @test */
+    function checking_if_an_object_was_loaded_with_this_result()
+    {
+        $thing = new Thing(1, 'Foo!');
+        $result = Result::fromArray([
+            'thing' => [
+                '1' => $thing,
+            ]
+        ], IdentityMap::with([
+            '1' => $thing,
+            '2' => $thing,
+        ]));
+
+        $this->assertTrue($result->has(Thing::class, '1'));
+        $this->assertTrue($result->has(Thing::class, '2'));
+        $this->assertTrue(isset($result['thing']['1']));
+        $this->assertFalse(isset($result['thing']['2']));
     }
 
     /** @test */
@@ -75,7 +94,7 @@ class Result_contains_labeled_objects extends TestCase
                 'thing:1' => $foo,
             ]
         ], IdentityMap::with([
-            '1' => $foo
+            '1' => $foo,
         ]));
         $result = $result->add('thing', 'thing:2', '2',  new Thing(2, 'Bar!'));
 
@@ -92,7 +111,7 @@ class Result_contains_labeled_objects extends TestCase
                 'thing:1' => $foo,
             ]
         ], IdentityMap::with([
-            '1' => $foo
+            '1' => $foo,
         ]));
         $bar = new Thing(2, 'Bar!');
         $secondResult = Result::fromArray([
@@ -101,7 +120,7 @@ class Result_contains_labeled_objects extends TestCase
             ]
         ], IdentityMap::with([
             '1' => $foo,
-            '2' => $bar
+            '2' => $bar,
         ]));
 
         $finalResult = $firstResult->mergeWith($secondResult);
@@ -151,7 +170,7 @@ class Result_contains_labeled_objects extends TestCase
                 '1' => $thing,
             ]
         ], IdentityMap::with([
-            '1' => $thing
+            '1' => $thing,
         ]));
 
         $this->expectException(BadMethodCallException::class);
