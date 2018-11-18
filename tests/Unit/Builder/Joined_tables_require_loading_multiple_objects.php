@@ -59,12 +59,12 @@ class Joined_tables_require_loading_multiple_objects extends TestCase
             // Or just use this:
             Joined::table(
                 Load::each('foo')
-                    ->by('name')
                     ->as(Foo::class)
+                    ->by('name')
                     ->havingMany('bars', 'bar'),
                 Load::each('bar')
-                    ->by('name')
                     ->as(Bar::class)
+                    ->by('name')
                     ->havingMany('foos', 'foo')
             )()
         );

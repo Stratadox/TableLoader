@@ -27,11 +27,11 @@ class Boxes_filled_with_Things extends TestCase
         /** @var LoadsTables $make */
         $make = Joined::table(
             Load::each('thing')
-                ->by('name')
                 ->as(Thing::class, [
                     'name' => Is::string(),
                     'box' => Has::one(BoxProxy::class)
                 ])
+                ->by('name')
         )();
 
         $table = $this->table([
@@ -55,12 +55,12 @@ class Boxes_filled_with_Things extends TestCase
         /** @var LoadsTables $make */
         $make = Joined::table(
             Load::each('box')
+                ->as(Box::class)
                 ->by('id')
-                ->as(Box::class, [])
                 ->havingMany('items', 'thing'),
             Load::each('thing')
-                ->by('name')
                 ->as(Thing::class)
+                ->by('name')
                 ->havingOne('box', 'box')
         )();
 

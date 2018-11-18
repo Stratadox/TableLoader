@@ -37,12 +37,12 @@ class Students_follow_Courses extends TestCase
 
         $make = Joined::table(
             Load::each('student')
-                ->by('name')
                 ->as(Student::class)
+                ->by('name')
                 ->havingMany('courses', 'course', Courses::class),
             Load::each('course')
-                ->by('name')
                 ->as(Course::class)
+                ->by('name')
                 ->havingMany('subscribedStudents', 'student', Students::class)
         )();
 

@@ -65,8 +65,8 @@ trait Mapping
                 InCase::of('text-list')->as(TextListAttribute::class)->havingMany('value', 'reason_x'),
             ])->with(['name' => Is::string()]),
             Load::each('reason_x')
-                ->by('text')
                 ->as(TextValue::class, ['value' => Is::stringInKey('text')])
+                ->by('text')
         )(), $reviewLoader];
     }
 

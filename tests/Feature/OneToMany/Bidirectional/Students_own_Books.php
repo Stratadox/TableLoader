@@ -38,16 +38,16 @@ class Students_own_Books extends TestCase
 
         $make = Joined::table(
             Load::each('student')
-                ->by('first_name', 'last_name')
                 ->as(Student::class, [
                     'name' => Has::one(Name::class)
                         ->with('firstName', In::key('first_name'))
                         ->with('lastName', In::key('last_name'))
                 ])
+                ->by('first_name', 'last_name')
                 ->havingMany('books', 'book'),
             Load::each('book')
-                ->by('name')
                 ->as(Book::class, ['name' => Is::string()])
+                ->by('name')
                 ->havingOne('owner', 'student')
         )();
 

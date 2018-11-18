@@ -40,8 +40,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function defining_simple_object_creation()
     {
         $howToLoad = Load::each('thing')
-            ->by('id')
-            ->as(Thing::class);
+            ->as(Thing::class)
+            ->by('id');
 
         $this->assertEquals(
             Objects::producedByThis(
@@ -57,8 +57,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function finding_the_label()
     {
         $howToLoad = Load::each('thing')
-            ->by('id')
-            ->as(Thing::class);
+            ->as(Thing::class)
+            ->by('id');
 
         $this->assertEquals('thing', $howToLoad->label());
     }
@@ -76,8 +76,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function finding_the_custom_identifying_columns()
     {
         $howToLoad = Load::each('thing')
-            ->by('name', 'id')
-            ->as(Thing::class);
+            ->as(Thing::class)
+            ->by('name', 'id');
 
         $this->assertEquals(['thing_name', 'thing_id'], $howToLoad->identityColumns());
     }
@@ -108,8 +108,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function defining_an_object_without_wiring()
     {
         $howToLoad = Load::each('thing')
-            ->by('id')
-            ->as(Thing::class);
+            ->as(Thing::class)
+            ->by('id');
 
         $this->assertEmpty($howToLoad->wiring());
     }
@@ -118,8 +118,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function defining_has_many_object_wiring()
     {
         $howToLoad = Load::each('foo')
-            ->by('name')
             ->as(Foo::class)
+            ->by('name')
             ->havingMany('bars', 'bar')
             ->identifying('bar', 'bar_name');
 
@@ -137,8 +137,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function defining_has_many_object_wiring_with_custom_collection_object()
     {
         $howToLoad = Load::each('basket')
-            ->by('name')
             ->as(Basket::class)
+            ->by('name')
             ->havingMany('things', 'thing', Things::class)
             ->identifying('thing', 'thing_id');
 
@@ -156,8 +156,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function defining_has_one_object_wiring()
     {
         $howToLoad = Load::each('member')
-            ->by('name')
             ->as(Member::class)
+            ->by('name')
             ->havingOne('group', 'group')
             ->identifying('group', 'group_name');
 
@@ -175,8 +175,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function defining_multiple_object_relations()
     {
         $howToLoad = Load::each('baz')
-            ->by('name')
             ->as(Baz::class)
+            ->by('name')
             ->havingMany('foos', 'foo')
             ->havingMany('bars', 'bar')
             ->identifying('foo', 'foo_name')
@@ -203,8 +203,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function throwing_an_exception_when_the_relation_could_not_be_identified()
     {
         $howToLoad = Load::each('baz')
-            ->by('name')
             ->as(Baz::class)
+            ->by('name')
             ->havingMany('foos', 'foo')
             ->havingMany('bars', 'bar');
 
@@ -222,8 +222,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function throwing_an_exception_when_the_class_cannot_be_produced()
     {
         $howToLoad = Load::each('thing')
-            ->by('id')
-            ->as('non-existing class');
+            ->as('non-existing class')
+            ->by('id');
 
         $this->expectException(CannotMakeTableMapping::class);
         $this->expectExceptionCode(0);
@@ -240,8 +240,8 @@ class Load_objects_according_to_the_mapping extends TestCase
     function throwing_an_exception_when_the_mapped_class_cannot_be_produced()
     {
         $howToLoad = Load::each('thing')
-            ->by('id')
-            ->as('non-existing class', ['name' => Is::string()]);
+            ->as('non-existing class', ['name' => Is::string()])
+            ->by('id');
 
         $this->expectException(CannotMakeTableMapping::class);
         $this->expectExceptionCode(0);

@@ -38,9 +38,9 @@ class Firm_with_Lawyers_and_Clients extends TestCase
         ]);
 
         $make = Joined::table(
-            Load::each('firm')->by('name')->as(Firm::class)->havingMany('lawyers', 'lawyer'),
-            Load::each('lawyer')->by('name')->as(Lawyer::class)->havingMany('clients', 'client'),
-            Load::each('client')->by('name')->as(Client::class)
+            Load::each('firm')->as(Firm::class)->by('name')->havingMany('lawyers', 'lawyer'),
+            Load::each('lawyer')->as(Lawyer::class)->by('name')->havingMany('clients', 'client'),
+            Load::each('client')->as(Client::class)->by('name')
         )();
 
         assert($make instanceof LoadsTables);
